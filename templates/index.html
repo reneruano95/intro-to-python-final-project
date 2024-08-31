@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Music Catalog</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .container {
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 800px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .container h1 {
+        font-size: 24px;
+        margin-bottom: 20px;
+        color: #333333;
+      }
+
+      .search-box {
+        display: flex;
+        margin-bottom: 20px;
+      }
+
+      .search-box input {
+        width: calc(100% - 60px);
+        padding: 10px;
+        border: 1px solid #cccccc;
+        border-radius: 4px 0 0 4px;
+        outline: none;
+      }
+
+      .search-box button {
+        padding: 10px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 0 4px 4px 0;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      .search-box button:hover {
+        background-color: #0056b3;
+      }
+
+      .albums {
+        overflow-y: auto;
+        flex-grow: 1;
+        text-align: left;
+        margin-top: 20px;
+      }
+
+      .album {
+        background-color: #f9f9f9;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .album img {
+        width: 60px;
+        height: 60px;
+        margin-right: 15px;
+        border-radius: 4px;
+        float: left;
+      }
+
+      .album-info {
+        overflow: hidden;
+      }
+
+      .album-info h2 {
+        font-size: 18px;
+        margin: 0 0 5px 0;
+        color: #333333;
+      }
+
+      .album-info p {
+        font-size: 14px;
+        margin: 0 0 10px 0;
+        color: #777777;
+      }
+
+      .disc-section {
+        margin-top: 15px;
+      }
+
+      .disc-section h3 {
+        margin-bottom: 10px;
+        font-size: 16px;
+        color: #555555;
+      }
+
+      .track-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .track {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px;
+        border-bottom: 1px solid #e0e0e0;
+      }
+
+      .track:last-child {
+        border-bottom: none;
+      }
+
+      .track-number {
+        color: #777777;
+        font-size: 12px;
+        width: 25px;
+      }
+
+      .track-name {
+        flex-grow: 1;
+        padding-left: 10px;
+        color: #333333;
+      }
+
+      .track-time {
+        color: #777777;
+        font-size: 12px;
+      }
+
+      .track-preview {
+        display: flex;
+        align-items: center;
+      }
+
+      .audio-player {
+        width: 300px; /* Adjust width as needed */
+        height: 15px; /* Adjust height as needed */
+        margin-left: 5px;
+      }
+
+      .audio-player::-webkit-media-controls {
+        /* WebKit browsers specific styling, not always necessary */
+      }
+
+      .audio-player::-webkit-media-controls-panel {
+        /* WebKit browsers specific styling, not always necessary */
+      }
+
+      .audio-player::-webkit-media-controls-play-button {
+        /* WebKit browsers specific styling, not always necessary */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Music Catalog</h1>
+      <div class="search-box">
+        <input type="text" id="artist-name" placeholder="Enter artist first and last names" />
+        <button onclick="searchAlbums()">Search</button>
+      </div>
+
+      <div class="albums" id="albums">
+        <!-- Album entries will be inserted here dynamically -->
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const artistInput = document.getElementById("artist-name")
+        const searchButton = document.querySelector("button")
+
+        artistInput.addEventListener("keydown", (event) => {
+          if (event.key === "Enter") {
+            event.preventDefault() // Prevent form submission if inside a form
+            searchAlbums()
+          }
+        })
+
+        artistInput.focus()
+      })
+
+      async function searchAlbums() {
+        const artistName = document.getElementById("artist-name").value.trim()
+
+        if (!artistName) {
+          alert("Please enter an artist name.")
+          return
+        }
+
+        try {
+          const response = await fetch(
+            `/artist/${encodeURIComponent(artistName)}`
+          )
+          const data = await response.json()
+          if (response.ok)
+            displayAlbums(data)
+          else 
+            alert(data.detail ?? "Oops! Something failed. Please try again.")
+        } catch (error) {
+          console.error("Error:", error)
+          alert("Could not retrieve albums. Please try again later.")
+        }
+      }
+
+      function displayAlbums(data) {
+        const albumsContainer = document.getElementById("albums")
+        albumsContainer.innerHTML = "" // Clear any existing content
+
+        if (data.albums.length === 0) {
+          albumsContainer.innerHTML = "<p>No albums found for this artist.</p>"
+          return
+        }
+
+        data.albums && data.albums.forEach((album) => {
+          const albumElement = document.createElement("div")
+          albumElement.classList.add("album")
+
+          const discs = groupTracksByDisc(album.tracks)
+
+          const discSections = discs
+            .map(
+              (disc) => `
+          <div class="disc-section">
+              <h3>Disc ${disc.discNumber}</h3>
+              <div class="track-list">
+                  ${disc.tracks
+                    .map(
+                      (track) => `
+                      <div class="track">
+                          <div class="track-number">${track.number}</div>
+                          <div class="track-name">${track.name}</div>
+                          <div class="track-time">${(
+                            track.time_millis / 60000
+                          ).toFixed(2)} min</div>
+                         <div class="track-preview">
+                            <audio class="audio-player" controls src="${
+                              track.preview_url
+                            }" />
+                         </div>
+                      </div>
+                  `
+                    )
+                    .join("")}
+              </div>
+          </div>
+      `
+            )
+            .join("")
+
+          albumElement.innerHTML = `
+                <img src="${album.image_url.replace(
+                  "100x100",
+                  "600x600"
+                )}" alt="Album Cover">
+                <div class="album-info">
+                    <h2>${album.title}</h2>
+                    <p>${data.name}</p>
+                    ${discSections}
+                </div>
+            `
+
+          albumsContainer.appendChild(albumElement)
+        })
+      }
+
+      function groupTracksByDisc(tracks) {
+        const discs = {}
+
+        tracks && tracks.forEach((track) => {
+          if (!discs[track.disc]) {
+            discs[track.disc] = {
+              discNumber: track.disc,
+              tracks: [],
+            }
+          }
+          discs[track.disc].tracks.push(track)
+        })
+
+        return Object.values(discs)
+      }
+    </script>
+  </body>
+</html>
