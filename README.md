@@ -44,11 +44,56 @@ source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
 pip install -r requirements.txt
 ```
 
-### 4. Explore the Project
+### 4. Running the Application with Uvicorn
+
+After setting up the environment, you can run the application locally using [Uvicorn](https://www.uvicorn.org/), an ASGI server that is great for serving Python web applications, particularly those built with FastAPI or similar frameworks.
+
+#### Step-by-Step Guide
+
+1. **Ensure Uvicorn is Installed**:
+   - Uvicorn should be listed in your `requirements.txt` file, so it should already be installed if you've run `pip install -r requirements.txt`.
+   - If Uvicorn is not installed, you can install it manually:
+
+   ```bash
+   pip install uvicorn
+   ```
+
+2. **Run the Application**:
+   - Use the following command to start the application:
+
+   ```bash
+   uvicorn api.main:app --reload
+   ```
+
+   Here’s a breakdown of the command:
+   - `api.main:app` refers to the `app` object inside your `main.py` file located in the `api` directory. This is the application instance that Uvicorn will serve.
+   - `--reload` enables auto-reloading, which is useful during development. It automatically restarts the server whenever you make changes to the code.
+
+3. **Access the Application**:
+   - Once Uvicorn is running, you can access the application by navigating to `http://127.0.0.1:8000` in your web browser.
+
+4. **Stopping the Server**:
+   - To stop the server, press `Ctrl + C` in your terminal.
+
+#### Example Output
+
+When you run the command, you should see output similar to this in your terminal:
+
+```plaintext
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [12345] using StatReload
+INFO:     Started server process [12346]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+```
+
+Now, you can interact with your Python web application directly from your browser or API client!
+
+### 5. Explore the Project
 
 Take some time to explore the project structure and understand the existing code. Familiarize yourself with the different modules and files in the repository.
 
-### 5. Develop Your Feature or Improvement
+### 6. Develop Your Feature or Improvement
 
 Choose an area of the project to work on. You might want to add a new feature, improve an existing one, or fix a bug. Once you've identified what you want to work on, create a new branch for your changes:
 
@@ -56,7 +101,7 @@ Choose an area of the project to work on. You might want to add a new feature, i
 git checkout -b feature/your-feature-name
 ```
 
-### 6. Commit and Push Your Changes
+### 7. Commit and Push Your Changes
 
 As you work on your feature, commit your changes regularly:
 
@@ -66,7 +111,7 @@ git commit -m "Describe your changes here"
 git push origin feature/your-feature-name
 ```
 
-### 7. Submit a Pull Request
+### 8. Submit a Pull Request
 
 Once you're satisfied with your work, open a pull request to merge your changes back into your forked repository. If you'd like, you can also submit a pull request to the original repository to contribute your improvements to the wider community.
 
@@ -74,7 +119,7 @@ Once you're satisfied with your work, open a pull request to merge your changes 
 
 Here's a brief overview of the project structure:
 
-```
+```plaintext
 intro-to-python/
 │
 ├── api/                  # API module
@@ -92,6 +137,9 @@ intro-to-python/
 │   ├── AlbumService.py   # Album service abstraction
 │   ├── filecache.py      # File cache implementation
 │   └── itunes.py         # iTunes implementation
+│
+├── templates/            # HTML templates
+│   └── index.html        # Home page
 │
 ├── test/                 # Unit tests for the project
 │   ├── test_album.py     # Tests for album
@@ -122,5 +170,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ---
 
 ### Good luck with your final project, and happy coding! 🎉
-
----
