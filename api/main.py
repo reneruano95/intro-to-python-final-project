@@ -27,11 +27,11 @@ async def home(request: Request):
 
 # API - use api routes module
 @app.get("/artist/{name}")
-def get_artist(name: str):
+async def get_artist(name: str):
     if match := re.search(r"([A-Za-z]{2,20})[^A-Za-z]*([A-Za-z]{0,20})", name.strip().lower()):
         first, last = match.groups()
         artist = Artist(f"{first.capitalize()} {last.capitalize()}")
-        artist.get_albums(3)
+        await artist.get_albums(3)
         return artist
     else:
         raise HTTPException(

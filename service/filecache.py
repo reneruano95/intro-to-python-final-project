@@ -30,12 +30,12 @@ def map_albums(artist_data) -> List[Album]:
 
 
 class FileCacheAlbumService(AlbumService):
-    def get_albums(self, artist_name: str, limit: int):
+    async def get_albums(self, artist_name: str, limit: int):
         path = get_albums_path(artist_name, limit)
         with path.open("r") as file:
             return map_albums(json.load(file))
 
-    def get_tracks(self, _):
+    async def get_tracks(self, _):
         pass
 
 

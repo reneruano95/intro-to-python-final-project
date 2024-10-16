@@ -9,13 +9,13 @@ class Artist:
         self.name = name
         self.albums: List[Album] = []
 
-    def get_albums(self, limit: int) -> None:
+    async def get_albums(self, limit: int) -> None:
         # tries services in order
         for service in AlbumService.services():
             try:
-                self.albums = service.get_albums(self.name, limit)
+                self.albums = await service.get_albums(self.name, limit)
                 for album in self.albums:
-                    tracks = service.get_tracks(album.id)
+                    tracks = await service.get_tracks(album.id)
                     if tracks:
                         album.set_tracks(tracks)
                 break

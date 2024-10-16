@@ -1,6 +1,7 @@
 import logging
-import requests
 from typing import List, cast
+import asyncio
+import httpx
 
 import requests.structures
 from model.album import Album
@@ -27,35 +28,38 @@ def map_track(data) -> Track:
 
 
 class iTunesAlbumService(AlbumService):
-    def get_albums(self, artist_name: str, limit: int):
+    async def get_albums(self, artist_name: str, limit: int):
         params: dict[str, str | int] = {
             "term": artist_name,
             "entity": "album",
             "limit": limit
         }
-        res = requests.get("https://itunes.apple.com/search", params)
-        if res.status_code == 200:
-            data = res.json()
-            albums = data.get('results', [])
-            logger.info(f"""Loaded {len(albums)} {
-                artist_name} albums from iTunes""")
-            return [map_album(x) for x in albums]
-        else:
-            logger.error(f"""get_albums failed on {
-                         artist_name}: {res.status_code}""")
-            return cast(List[Album], [])
+        async with httpx.AsyncClient() as client:
+            res = await client.get("https://itunes.apple.com/search", params=params)
+            if res.status_code == 200:
+                data = res.json()
+                albums = data.get('results', [])
+                logger.info(f"""Loaded {len(albums)} {
+                    artist_name} albums from iTunes""")
+                return [map_album(x) for x in albums]
+            else:
+                logger.error(f"""get_albums failed on {
+                    artist_name}: {res.status_code}""")
+                return cast(List[Album], [])
 
-    def get_tracks(self, album_id: int):
+    async def get_tracks(self, album_id: int):
         params: dict[str, str | int] = {
             "id": album_id,
             "entity": "song"
         }
-        res = requests.get("https://itunes.apple.com/lookup", params)
-        if res.status_code == 200:
-            data = res.json()
-            tracks = data.get("results", [])[1:]
-            logger.info(f"Loaded {len(tracks)} tracks from iTunes")
-            return [map_track(x) for x in tracks]
-        else:
-            logger.error(f"get_tracks failed on {album_id}: {res.status_code}")
-            return cast(List[Track], [])
+        async with httpx.AsyncClient() as client:
+            res = await client.get("https://itunes.apple.com/lookup", params=params)
+            if res.status_code == 200:
+                data = res.json()
+                tracks = data.get("results", [])[1:]
+                logger.info(f"Loaded {len(tracks)} tracks from iTunes")
+                return [map_track(x) for x in tracks]
+            else:
+                logger.error(f"""get_tracks failed on {
+                             album_id}: {res.status_code}""")
+                return cast(List[Track], [])

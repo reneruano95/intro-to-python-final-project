@@ -9,11 +9,11 @@ class AlbumService(ABC):
     _services: List['AlbumService'] = []
 
     @abstractmethod
-    def get_albums(self, artist_name: str, limit: int) -> List[Album]:
+    async def get_albums(self, artist_name: str, limit: int) -> List[Album]:
         pass
 
     @abstractmethod
-    def get_tracks(self, album_id: int) -> List[Track]:
+    async def get_tracks(self, album_id: int) -> List[Track]:
         pass
 
     @classmethod
