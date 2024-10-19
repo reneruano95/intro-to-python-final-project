@@ -10,10 +10,27 @@ logger = logging.getLogger(__name__)
 
 
 def get_albums_path(artist_name: str, limit: int) -> Path:
+    """Builds the file name for the albums cache file.
+
+    Args:
+        artist_name (str): artist name
+        limit (int): number of albums to cache
+
+    Returns:
+        Path: file path for the albums cache file
+    """
     return Path(f"./appcache/{artist_name.replace(' ', '-')}-{limit}.json")
 
 
 def map_albums(artist_data) -> List[Album]:
+    """Maps the data from the cache file to the Album model.
+
+    Args:
+        artist_data (_type_): artist data from the cache file
+
+    Returns:
+        List[Album]: list of albums
+    """
     albums: List[Album] = []
     for album_data in artist_data:
         tracks = album_data['tracks']
@@ -30,6 +47,12 @@ def map_albums(artist_data) -> List[Album]:
 
 
 class FileCacheAlbumService(AlbumService):
+    """File cache adapter for the AlbumService.
+
+    Args:
+        AlbumService (_type_): AlbumService superclass
+    """
+
     async def get_albums(self, artist_name: str, limit: int):
         path = get_albums_path(artist_name, limit)
         with path.open("r") as file:
@@ -40,7 +63,13 @@ class FileCacheAlbumService(AlbumService):
 
 
 def cache_albums(artist_name: str, albums: List[Album]):
-    # make sure albums have tracks before caching
+    """Utility function used to cache albums that have been downloaded.
+
+    Args:
+        artist_name (str): the artist name
+        albums (List[Album]): the list of albums to cache
+    """
+
     if len(albums) == 0:
         return
     albums_with_tracks = [

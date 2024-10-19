@@ -185,36 +185,46 @@
         const artistInput = document.getElementById("artist-name")
         const searchButton = document.querySelector("button")
 
+        searchButton.addEventListener("click", () => {
+          searchAlbums(searchButton, artistInput)
+        })
+
         artistInput.addEventListener("keydown", (event) => {
           if (event.key === "Enter") {
             event.preventDefault() // Prevent form submission if inside a form
-            searchAlbums()
+            searchAlbums(searchButton, artistInput)
           }
         })
 
         artistInput.focus()
       })
 
-      async function searchAlbums() {
-        const artistName = document.getElementById("artist-name").value.trim()
-
+      async function searchAlbums(searchButton, artistInput) {
+        const artistName = artistInput.value.trim()
         if (!artistName) {
           alert("Please enter an artist name.")
           return
         }
 
         try {
+          searchButton.disabled = true
+          artistInput.disabled = true
           const response = await fetch(
             `/artist/${encodeURIComponent(artistName)}`
           )
           const data = await response.json()
-          if (response.ok)
+          if (response.ok) {
             displayAlbums(data)
+            artistInput.value = ""
+          }
           else 
             alert(data.detail ?? "Oops! Something failed. Please try again.")
         } catch (error) {
           console.error("Error:", error)
           alert("Could not retrieve albums. Please try again later.")
+        } finally {
+          searchButton.disabled = false
+          artistInput.disabled = false
         }
       }
 

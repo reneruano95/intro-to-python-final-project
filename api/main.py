@@ -6,33 +6,52 @@ from service.AlbumService import AlbumService
 from service.filecache import FileCacheAlbumService
 from service.itunes import iTunesAlbumService
 
-# Configure logging
+"""
+This is the main entry point for the application.
+
+Here we configure app level services and routes, 
+like logging and the template engine used to render the HTML pages.
+
+We also initialize our AlbumService port, which is configured with
+two adapters:
+- FileCacheAlbumService, which uses the file system to cache albums that have been downloaded
+- iTunesAlbumService, which uses the iTunes API to download new albums
+"""
+
+# Configure logging to show info level and above to the console, using our custom format
 logging.basicConfig(level=logging.INFO,
                     format='%(levelname)s: %(name)s - %(message)s')
 
-# Configure HTML template engine
+# Configure the Jinja2 template engine
 templates = templating.Jinja2Templates(directory="templates")
 
-# Configure album services
+# Configure album port and adapters
 AlbumService.init([FileCacheAlbumService(), iTunesAlbumService()])
 
+# Configure the FastAPI app to serve the API and the home page
 app = FastAPI()
 
 
-# Home page
+# Serves the home page at / using the Jinja2 template engine
 @app.get("/", response_class=responses.HTMLResponse)
 async def home(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
 
-# API - use api routes module
+# API route to get a list of albums for an artist
 @app.get("/artist/{name}")
 async def get_artist(name: str):
     if match := re.search(r"([A-Za-z]{2,20})[^A-Za-z]*([A-Za-z]{0,20})", name.strip().lower()):
         first, last = match.groups()
         artist = Artist(f"{first.capitalize()} {last.capitalize()}")
-        await artist.get_albums(3)
+        await artist.get_albums(3)  # should we pass in the limit?
+        # print(artist)
         return artist
     else:
         raise HTTPException(
             status_code=400, detail=f"Invalid artist name: {name}")
+
+# Here we can add more API routes for other functionality, like:
+# - API route to get a list of albums for a genre
+# - API route to get a list of albums for a year
+# - API route to get a list of albums for a decade
