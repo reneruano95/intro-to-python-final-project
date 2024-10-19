@@ -1,15 +1,10 @@
-import logging
-from model.artist import Artist
-from service.itunes import iTunesAlbumService
-from service.AlbumService import AlbumService
-from service.filecache import FileCacheAlbumService
-
-AlbumService.init([FileCacheAlbumService(), iTunesAlbumService()])
+import pytest
+import service.itunes as itunes
 
 
-def test_service():
-    artist = Artist("John Mayer")
-    artist.get_albums(3)
+@pytest.mark.asyncio
+async def test_service():
+    artist = await itunes.search_artist("The Beatles", 3)
     desc = str(artist)
-    logging.info(desc)
+    # logging.info(artist)
     assert len(desc) > 0

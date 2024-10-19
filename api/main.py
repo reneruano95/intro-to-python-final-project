@@ -2,9 +2,7 @@ import logging
 import re
 from fastapi import FastAPI, HTTPException, Request, responses, templating
 from model.artist import Artist
-from service.AlbumService import AlbumService
-from service.filecache import FileCacheAlbumService
-from service.itunes import iTunesAlbumService
+from service.itunes import search_artist
 
 """
 This is the main entry point for the application.
@@ -25,9 +23,6 @@ logging.basicConfig(level=logging.INFO,
 # Configure the Jinja2 template engine
 templates = templating.Jinja2Templates(directory="templates")
 
-# Configure album port and adapters
-AlbumService.init([FileCacheAlbumService(), iTunesAlbumService()])
-
 # Configure the FastAPI app to serve the API and the home page
 app = FastAPI()
 
@@ -42,9 +37,9 @@ async def home(request: Request):
 @app.get("/artist/{name}")
 async def get_artist(name: str):
     if match := re.search(r"([A-Za-z]{2,20})[^A-Za-z]*([A-Za-z]{0,20})", name.strip().lower()):
-        first, last = match.groups()
-        artist = Artist(f"{first.capitalize()} {last.capitalize()}")
-        await artist.get_albums(3)  # should we pass in the limit?
+        artist_name = " ".join(match.groups())
+        # should we pass in the limit?
+        artist = await search_artist(artist_name, 3)
         # print(artist)
         return artist
     else:

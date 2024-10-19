@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field, asdict
-from typing import Any, List
+from typing import List
 from model.track import Track
 
 

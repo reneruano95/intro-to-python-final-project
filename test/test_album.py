@@ -14,7 +14,7 @@ def album_with_tracks():
     # Create an album instance and set tracks
     album = Album(id=1, title="Test Album",
                   image_url="http://example.com/album.jpg")
-    album.set_tracks([track1, track2])
+    album.tracks = [track1, track2]
 
     return album
 
