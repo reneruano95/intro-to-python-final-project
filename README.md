@@ -87,6 +87,14 @@ INFO:     Waiting for application startup.
 INFO:     Application startup complete.
 ```
 
+Navitage to <http://127.0.0.1:8000> in your browser to see the application in action, it should look like this after you enter the artist name:
+
+![Home Page](assets/home.png)
+
+Navigate to <http://127.0.0.1:8000/docs> to see the API documentation:
+
+![API Documentation](assets/api.png)
+
 Now, you can interact with your Python web application directly from your browser or API client!
 
 ### 5. Explore the Project

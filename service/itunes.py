@@ -22,7 +22,7 @@ def map_track(data) -> Track:
                  disc=data['discNumber'],
                  number=data['trackNumber'],
                  time_millis=data['trackTimeMillis'],
-                 preview_url=data['previewUrl'])
+                 preview_url=data.get('previewUrl'))
 
 
 async def get_artist(artist_name: str, limit: int) -> Artist:

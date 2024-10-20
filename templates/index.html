@@ -171,8 +171,8 @@
     <div class="container">
       <h1>Music Catalog</h1>
       <div class="search-box">
-        <input type="text" id="artist-name" placeholder="Enter artist first and last names" />
-        <button onclick="searchAlbums()">Search</button>
+        <input type="text" id="artist-name" placeholder="Enter artist name" />
+        <button>Search</button>
       </div>
 
       <div class="albums" id="albums">
@@ -186,21 +186,24 @@
         const searchButton = document.querySelector("button")
 
         searchButton.addEventListener("click", () => {
-          searchAlbums(searchButton, artistInput)
+          searchAlbums()
         })
 
         artistInput.addEventListener("keydown", (event) => {
           if (event.key === "Enter") {
             event.preventDefault() // Prevent form submission if inside a form
-            searchAlbums(searchButton, artistInput)
+            searchAlbums()
           }
         })
 
         artistInput.focus()
       })
 
-      async function searchAlbums(searchButton, artistInput) {
-        const artistName = artistInput.value.trim()
+      async function searchAlbums() {
+        const artistInput = document.getElementById("artist-name")
+        const searchButton = document.querySelector("button")
+
+        const artistName = artistInput?.value.trim()
         if (!artistName) {
           alert("Please enter an artist name.")
           return
@@ -258,12 +261,14 @@
                           <div class="track-name">${track.name}</div>
                           <div class="track-time">${(
                             track.time_millis / 60000
-                          ).toFixed(2)} min</div>
-                         <div class="track-preview">
-                            <audio class="audio-player" controls src="${
-                              track.preview_url
-                            }" />
-                         </div>
+                          ).toFixed(2)}
+                          </div>
+                          <div class="track-preview">
+                              ${track.preview_url ? `
+                              <audio class="audio-player" controls src="${
+                                track.preview_url
+                              }" />` : ""}
+                          </div>
                       </div>
                   `
                     )

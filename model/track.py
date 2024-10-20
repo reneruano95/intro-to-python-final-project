@@ -7,4 +7,4 @@ class Track:
     disc: int
     number: int
     time_millis: int
-    preview_url: str
+    preview_url: str | None = None
