@@ -142,7 +142,6 @@ intro-to-python/
 │
 ├── service/              # Service module
 │   ├── __init__.py       # Initialization file for the package
-│   ├── AlbumService.py   # Album service abstraction
 │   ├── filecache.py      # File cache implementation
 │   └── itunes.py         # iTunes implementation
 │

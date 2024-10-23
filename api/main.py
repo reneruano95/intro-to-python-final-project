@@ -35,11 +35,11 @@ async def home(request: Request):
 
 # API route to get a list of albums for an artist
 @app.get("/artist/{name}")
-async def get_artist(name: str):
+def get_artist(name: str):
     if match := re.search(r"([A-Za-z]{2,20})[^A-Za-z]*([A-Za-z]{0,20})", name.strip().lower()):
         artist_name = " ".join(match.groups())
-        # should we pass in the limit?
-        artist = await search_artist(artist_name, 3)
+        # should we pass in the limit in the querystring?
+        artist = search_artist(artist_name, 3)
         # print(artist)
         return artist
     else:

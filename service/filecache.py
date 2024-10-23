@@ -1,10 +1,9 @@
-from dataclasses import asdict
-from typing import Coroutine, Callable
 import json
 import logging
-from pathlib import Path
-from typing import Coroutine
+from dataclasses import asdict
 from model.artist import Artist
+from pathlib import Path
+from typing import Callable
 
 logger = logging.getLogger(__name__)
 
@@ -49,16 +48,16 @@ def save_artist(artist: Artist):
     logger.info(f"Cached {n} {artist.name} albums")
 
 
-def cache_artist(fn: Callable[[str, int], Coroutine[None, None, Artist]]) -> Callable[[str, int], Coroutine[None, None, Artist]]:
+def cache_artist(fn: Callable[[str, int], Artist]) -> Callable[[str, int], Artist]:
     """Decorator to cache the results of an Artist service.
 
     Args:
-        fn (Callable[[str, int], Coroutine]): service function to cache.
+        fn (Callable[[str, int], Artist]): service function to cache.
 
     Returns:
-        Callable[[str, int], Coroutine]: wrapped service function.
+        Callable[[str, int], Artist]: wrapped service function.
     """
-    async def wrapper(artist_name: str, limit: int) -> Artist:
+    def wrapper(artist_name: str, limit: int) -> Artist:
         path = get_artist_path(artist_name, limit)
 
         # Check if the cached file exists
@@ -72,7 +71,7 @@ def cache_artist(fn: Callable[[str, int], Coroutine[None, None, Artist]]) -> Cal
                 return artist
         else:
             # Call the original function if no cache is found
-            artist = await fn(artist_name, limit)
+            artist = fn(artist_name, limit)
             # Save the artist result to cache
             save_artist(artist)
             # Return the fetched Artist
