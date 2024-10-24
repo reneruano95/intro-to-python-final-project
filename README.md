@@ -14,6 +14,107 @@ In this course, you've learned the fundamentals of Python programming, including
 - **Version Control**: Use Git for version control to manage and track your changes.
 - **Collaboration**: Learn how to collaborate with others by submitting pull requests and reviewing code.
 
+## Prerequisites
+
+Before you can begin working on this project, you need to set up your development environment by installing the necessary tools. Below are step-by-step instructions for both macOS and Windows to install:
+
+ 1. Visual Studio Code (VSCode)
+ 2. Python
+ 3. Git
+
+### For macOS (using Homebrew)
+
+1. Open a terminal (search for “Terminal” in Spotlight or find it in the Applications > Utilities folder).
+2. Ensure Homebrew is installed by running:
+
+```bash
+brew --version
+```
+
+If Homebrew is not installed, install it with:
+
+```bash
+/bin/bash -c "$(curl -fsSL <https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh>)"
+```
+
+#### Install Visual Studio Code (Mac)
+
+```bash
+brew install --cask visual-studio-code
+# verify installation
+code --version
+```
+
+#### Install Python (Mac)
+
+Open a terminal and check if Python 3 is already installed by running:
+
+```bash  
+python3 --version
+```
+
+If Python 3 is installed, you’ll see a version number like Python 3.x.x. If not, install Python using Homebrew:
+
+```bash
+brew install python
+# verify installation
+python3 --version
+```
+
+#### Install Git (Mac)
+
+Open a terminal and check if Git is installed by running:
+
+```bash
+git --version
+```
+
+If Git is not installed, Homebrew will prompt you to install it, or you can manually install Git by running:
+
+```bash
+brew install git
+# verify installation
+git --version
+```
+
+### For Windows
+
+#### Install Visual Studio Code (Windows)
+
+1. Go to the VSCode website.
+2. Click the Download for Windows button.
+3. Open the .exe installer and follow the instructions:
+ • Ensure the option to Add to PATH is checked.
+4. Once installed, launch VSCode from the Start menu or by searching for it.
+
+#### Install Python (Windows)
+
+1. Go to the Python website.
+2. Click the Download Python 3.x.x button.
+3. Run the installer and make sure to check the box that says Add Python to PATH before clicking Install.
+4. After installation, open Command Prompt (search “cmd” in the Start menu) and verify Python is installed:
+
+```bash
+python --version
+```
+
+You should see Python 3.x.x.
+
+#### Install Git (Windows)
+
+1. Go to the Git website.
+2. Click Download for Windows.
+3. Run the installer with the default settings. Ensure the option Use Git from the command line is selected.
+4. After installation, open Command Prompt and verify the installation:
+
+```bash
+git --version
+```
+
+You should see the Git version number printed.
+
+Once these steps are completed, you will have all the tools (VSCode, Python, Git) installed, and you’ll be ready to start working on the project!
+
 ## Getting Started
 
 ### 1. Fork the Repository
@@ -39,8 +140,23 @@ cd intro-to-python
 Create a virtual environment and install the necessary dependencies:
 
 ```bash
+# Create a virtual environment:
+# ----------------------------
+# On macOS, you use python3... 
+# ... or create aliases in your profile (e.g., alias python=python3)
+# I use short aliases for brevity, such as:
+# alias py=python3
+# alias g=git
 python -m venv venv
-source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
+
+# Activate the virtual environment:
+# --------------------------------
+# On Windows, use `venv\Scripts\activate`
+source venv/bin/activate  
+
+# Install the dependencies:
+# ------------------------
+# You can use pip3 instead
 pip install -r requirements.txt
 ```
 
