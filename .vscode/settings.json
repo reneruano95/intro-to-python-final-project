@@ -14,4 +14,12 @@
   "python.analysis.useLibraryCodeForTypes": true,
   "python.analysis.autoIndent": true,
   "editor.defaultFormatter": "ms-python.autopep8",
+  "python.testing.pytestArgs": [
+    "test"
+  ],
+  "python.testing.unittestEnabled": false,
+  "python.testing.pytestEnabled": true,
+  "[markdown]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
 }

@@ -1,5 +1,7 @@
 # Python Introductory Course: Final Project Base Repository
 
+## Team: Loyal Rebels
+
 Welcome to the base repository for the final project of the Python Introductory Course! This repository serves as the foundation for your final project, where you'll apply the knowledge you've gained throughout the course to contribute to and improve an open-source project on GitHub.
 
 ## Project Overview
@@ -18,9 +20,9 @@ In this course, you've learned the fundamentals of Python programming, including
 
 Before you can begin working on this project, you need to set up your development environment by installing the necessary tools. Below are step-by-step instructions for both macOS and Windows to install:
 
- 1. Visual Studio Code (VSCode)
- 2. Python
- 3. Git
+1.  Visual Studio Code (VSCode)
+2.  Python
+3.  Git
 
 ### For macOS (using Homebrew)
 
@@ -49,7 +51,7 @@ code --version
 
 Open a terminal and check if Python 3 is already installed by running:
 
-```bash  
+```bash
 python3 --version
 ```
 
@@ -84,7 +86,7 @@ git --version
 1. Go to the VSCode website.
 2. Click the Download for Windows button.
 3. Open the .exe installer and follow the instructions:
- • Ensure the option to Add to PATH is checked.
+   • Ensure the option to Add to PATH is checked.
 4. Once installed, launch VSCode from the Start menu or by searching for it.
 
 #### Install Python (Windows)
@@ -142,7 +144,7 @@ Create a virtual environment and install the necessary dependencies:
 ```bash
 # Create a virtual environment:
 # ----------------------------
-# On macOS, you use python3... 
+# On macOS, you use python3...
 # ... or create aliases in your profile (e.g., alias python=python3)
 # I use short aliases for brevity, such as:
 # alias py=python3
@@ -152,7 +154,7 @@ python -m venv venv
 # Activate the virtual environment:
 # --------------------------------
 # On Windows, use `venv\Scripts\activate`
-source venv/bin/activate  
+source venv/bin/activate
 
 # Install the dependencies:
 # ------------------------
@@ -167,6 +169,7 @@ After setting up the environment, you can run the application locally using [Uvi
 #### Step-by-Step Guide
 
 1. **Ensure Uvicorn is Installed**:
+
    - Uvicorn should be listed in your `requirements.txt` file, so it should already be installed if you've run `pip install -r requirements.txt`.
    - If Uvicorn is not installed, you can install it manually:
 
@@ -175,6 +178,7 @@ After setting up the environment, you can run the application locally using [Uvi
    ```
 
 2. **Run the Application**:
+
    - Use the following command to start the application:
 
    ```bash
@@ -182,10 +186,12 @@ After setting up the environment, you can run the application locally using [Uvi
    ```
 
    Here’s a breakdown of the command:
+
    - `api.main:app` refers to the `app` object inside your `main.py` file located in the `api` directory. This is the application instance that Uvicorn will serve.
    - `--reload` enables auto-reloading, which is useful during development. It automatically restarts the server whenever you make changes to the code.
 
 3. **Access the Application**:
+
    - Once Uvicorn is running, you can access the application by navigating to `http://127.0.0.1:8000` in your web browser.
 
 4. **Stopping the Server**:
