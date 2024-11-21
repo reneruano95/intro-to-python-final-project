@@ -17,8 +17,7 @@ two adapters:
 """
 
 # Configure logging to show info level and above to the console, using our custom format
-logging.basicConfig(level=logging.INFO,
-                    format='%(levelname)s: %(name)s - %(message)s')
+logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(name)s - %(message)s")
 
 # Configure the Jinja2 template engine
 templates = templating.Jinja2Templates(directory="templates")
@@ -36,15 +35,17 @@ async def home(request: Request):
 # API route to get a list of albums for an artist
 @app.get("/artist/{name}")
 def get_artist(name: str):
-    if match := re.search(r"([A-Za-z]{2,20})[^A-Za-z]*([A-Za-z]{0,20})", name.strip().lower()):
+    if match := re.search(
+        r"([A-Za-z]{2,20})[^A-Za-z]*([A-Za-z]{0,20})", name.strip().lower()
+    ):
         artist_name = " ".join(match.groups())
         # should we pass in the limit in the querystring?
         artist = search_artist(artist_name, 3)
         # print(artist)
         return artist
     else:
-        raise HTTPException(
-            status_code=400, detail=f"Invalid artist name: {name}")
+        raise HTTPException(status_code=400, detail=f"Invalid artist name: {name}")
+
 
 # Here we can add more API routes for other functionality, like:
 # - API route to get a list of albums for a genre
