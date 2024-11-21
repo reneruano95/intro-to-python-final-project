@@ -8,4 +8,5 @@ class Album:
     id: int
     title: str
     image_url: str
+    genre: str
     tracks: List[Track] = field(default_factory=list)
