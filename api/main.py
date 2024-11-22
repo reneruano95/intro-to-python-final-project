@@ -76,13 +76,13 @@ def get_albums(album_name: str):
         album_name = " ".join(match.groups())
         # should we pass in the limit in the querystring?
         albums = search_albums(album_name, 3)
-        print(albums)
+        # print(albums)
         return albums
     else:
         raise HTTPException(status_code=400, detail=f"Invalid album name: {album_name}")
 
 
-# API route to get a list of tracks by name
+# - API route to get a list of tracks by name
 @app.get("/tracks/{track_name}")
 def get_tracks(track_name: str):
 
@@ -93,7 +93,7 @@ def get_tracks(track_name: str):
         track_name = " ".join(match.groups())
         # should we pass in the limit in the querystring?
         tracks = search_tracks(track_name, 3)
-        print(tracks)
+        # print(tracks)
         return tracks
     else:
         raise HTTPException(status_code=400, detail=f"Invalid track name: {track_name}")
