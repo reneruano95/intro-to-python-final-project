@@ -12,6 +12,7 @@ def map_album(data) -> Album:
     # Maps iTunes collections to Album
     return Album(
         id=data["collectionId"],
+        artist_id=data["artistId"],
         title=data["collectionName"],
         image_url=data["artworkUrl100"],
         genre=data["primaryGenreName"],
@@ -21,7 +22,10 @@ def map_album(data) -> Album:
 def map_track(data) -> Track:
     # Maps iTunes discs and tracks to Track
     return Track(
+        id=data["trackId"],
         name=data["trackName"],
+        artist_id=data["artistId"],
+        album_id=data["collectionId"],
         disc=data["discNumber"],
         number=data["trackNumber"],
         time_millis=data["trackTimeMillis"],
@@ -29,6 +33,7 @@ def map_track(data) -> Track:
     )
 
 
+# get artist by name
 def get_artist(artist_name: str, limit: int) -> Artist:
     params: dict[str, str | int] = {
         "term": artist_name,
@@ -58,6 +63,7 @@ def get_artist(artist_name: str, limit: int) -> Artist:
         return Artist(0, artist_name, "", [])
 
 
+# get tracks by album
 def get_tracks(album: Album) -> None:
     params: dict[str, str | int] = {"id": album.id, "entity": "song"}
     res = requests.get("https://itunes.apple.com/lookup", params=params)
@@ -77,7 +83,7 @@ def get_tracks(album: Album) -> None:
         album.tracks = []
 
 
-# get albums
+# get albums by name
 def get_albums(album_name: str, limit: int) -> list[Album]:
     params: dict[str, str | int] = {
         "term": album_name,
@@ -95,6 +101,24 @@ def get_albums(album_name: str, limit: int) -> list[Album]:
         return []
 
 
+# get tracks by name
+def get_tracks_by_name(track_name: str, limit: int) -> list[Track]:
+    params: dict[str, str | int] = {
+        "term": track_name,
+        "entity": "song",
+        "limit": limit,
+    }
+    res = requests.get("https://itunes.apple.com/search", params=params)
+    if res.status_code == 200:
+        data = res.json()
+        tracks = data.get("results", [])
+        logger.info(f"Loaded {len(tracks)} tracks from iTunes")
+        return [map_track(x) for x in tracks]
+    else:
+        logger.error(f"get_tracks_by_name failed on {track_name}: {res.status_code}")
+        return []
+
+
 @cache_artist
 def search_artist(artist_name: str, limit: int) -> Artist:
     artist = get_artist(artist_name, limit)
@@ -108,3 +132,7 @@ def search_albums(album_name: str, limit: int) -> list[Album]:
     for album in albums:
         get_tracks(album)
     return albums
+
+
+def search_tracks(track_name: str, limit: int) -> list[Track]:
+    return get_tracks_by_name(track_name, limit)

@@ -215,9 +215,14 @@
           // const response = await fetch(
           //   `/artist/${encodeURIComponent(artistName)}`
           // )
+          // const response = await fetch(
+          //   `/albums/${encodeURIComponent(artistName)}`
+          // );
+
           const response = await fetch(
-            `/albums/${encodeURIComponent(artistName)}`
+            `/tracks/${encodeURIComponent(artistName)}`
           );
+
           const data = await response.json();
           if (response.ok) {
             displayAlbums(data);

@@ -6,6 +6,7 @@ from model.track import Track
 @dataclass
 class Album:
     id: int
+    artist_id: int
     title: str
     image_url: str
     genre: str
