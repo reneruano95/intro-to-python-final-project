@@ -2,7 +2,7 @@ import logging
 import re
 from fastapi import FastAPI, HTTPException, Request, responses, templating
 from model.artist import Artist
-from service.itunes import search_artist
+from service.itunes import search_artist, search_albums
 
 """
 This is the main entry point for the application.
@@ -51,3 +51,19 @@ def get_artist(name: str):
 # - API route to get a list of albums for a genre
 # - API route to get a list of albums for a year
 # - API route to get a list of albums for a decade
+
+
+# - API route to get a list of albums
+@app.get("/albums/{album_name}")
+def get_albums(album_name: str):
+    # Here we would call the AlbumService to get a list of albums
+    if match := re.search(
+        r"([A-Za-z]{2,20})[^A-Za-z]*([A-Za-z]{0,20})", album_name.strip().lower()
+    ):
+        album_name = " ".join(match.groups())
+        # should we pass in the limit in the querystring?
+        albums = search_albums(album_name, 3)
+        print(albums)
+        return albums
+    else:
+        raise HTTPException(status_code=400, detail=f"Invalid album name: {album_name}")

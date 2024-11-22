@@ -182,74 +182,77 @@
 
     <script>
       document.addEventListener("DOMContentLoaded", () => {
-        const artistInput = document.getElementById("artist-name")
-        const searchButton = document.querySelector("button")
+        const artistInput = document.getElementById("artist-name");
+        const searchButton = document.querySelector("button");
 
         searchButton.addEventListener("click", () => {
-          searchAlbums()
-        })
+          searchAlbums();
+        });
 
         artistInput.addEventListener("keydown", (event) => {
           if (event.key === "Enter") {
-            event.preventDefault() // Prevent form submission if inside a form
-            searchAlbums()
+            event.preventDefault(); // Prevent form submission if inside a form
+            searchAlbums();
           }
-        })
+        });
 
-        artistInput.focus()
-      })
+        artistInput.focus();
+      });
 
       async function searchAlbums() {
-        const artistInput = document.getElementById("artist-name")
-        const searchButton = document.querySelector("button")
+        const artistInput = document.getElementById("artist-name");
+        const searchButton = document.querySelector("button");
 
-        const artistName = artistInput?.value.trim()
+        const artistName = artistInput?.value.trim();
         if (!artistName) {
-          alert("Please enter an artist name.")
-          return
+          alert("Please enter an artist name.");
+          return;
         }
 
         try {
-          searchButton.disabled = true
-          artistInput.disabled = true
+          searchButton.disabled = true;
+          artistInput.disabled = true;
+          // const response = await fetch(
+          //   `/artist/${encodeURIComponent(artistName)}`
+          // )
           const response = await fetch(
-            `/artist/${encodeURIComponent(artistName)}`
-          )
-          const data = await response.json()
+            `/albums/${encodeURIComponent(artistName)}`
+          );
+          const data = await response.json();
           if (response.ok) {
-            displayAlbums(data)
-            artistInput.value = ""
-          }
-          else 
-            alert(data.detail ?? "Oops! Something failed. Please try again.")
+            displayAlbums(data);
+            artistInput.value = "";
+          } else
+            alert(data.detail ?? "Oops! Something failed. Please try again.");
         } catch (error) {
-          console.error("Error:", error)
-          alert("Could not retrieve albums. Please try again later.")
+          console.error("Error:", error);
+          alert("Could not retrieve albums. Please try again later.");
         } finally {
-          searchButton.disabled = false
-          artistInput.disabled = false
-          artistInput.focus()
+          searchButton.disabled = false;
+          artistInput.disabled = false;
+          artistInput.focus();
         }
       }
 
       function displayAlbums(data) {
-        const albumsContainer = document.getElementById("albums")
-        albumsContainer.innerHTML = "" // Clear any existing content
+        const albumsContainer = document.getElementById("albums");
+        albumsContainer.innerHTML = ""; // Clear any existing content
 
         if (data.albums.length === 0) {
-          albumsContainer.innerHTML = "<p>No albums found for this artist.</p>"
-          return
+          albumsContainer.innerHTML = "<p>No albums found for this artist.</p>";
+          return;
         }
 
-        data.albums && data.albums.forEach((album) => {
-          const albumElement = document.createElement("div")
-          albumElement.classList.add("album")
+        data.albums &&
+          data.albums.forEach((album) => {
+            const albumElement = document.createElement("div");
+            albumElement.classList.add("album");
 
-          const discs = groupTracksByDisc(album.tracks)
+            const discs = groupTracksByDisc(album.tracks);
 
-          const discSections = discs
-            .map(
-              (disc) => `
+            const discSections = discs
+              .map(
+                (disc) => `
           <div class="disc-section">
               <h3>Disc ${disc.discNumber}</h3>
               <div class="track-list">
@@ -264,10 +267,12 @@
                           ).toFixed(2)}
                           </div>
                           <div class="track-preview">
-                              ${track.preview_url ? `
-                              <audio class="audio-player" controls src="${
+                              ${
                                 track.preview_url
-                              }" />` : ""}
+                                  ? `
+                              <audio class="audio-player" controls src="${track.preview_url}" />`
+                                  : ""
+                              }
                           </div>
                       </div>
                   `
@@ -276,10 +281,10 @@
               </div>
           </div>
       `
-            )
-            .join("")
+              )
+              .join("");
 
-          albumElement.innerHTML = `
+            albumElement.innerHTML = `
                 <img src="${album.image_url.replace(
                   "100x100",
                   "600x600"
@@ -289,26 +294,27 @@
                     <p>${data.name}</p>
                     ${discSections}
                 </div>
-            `
+            `;
 
-          albumsContainer.appendChild(albumElement)
-        })
+            albumsContainer.appendChild(albumElement);
+          });
       }
 
       function groupTracksByDisc(tracks) {
-        const discs = {}
+        const discs = {};
 
-        tracks && tracks.forEach((track) => {
-          if (!discs[track.disc]) {
-            discs[track.disc] = {
-              discNumber: track.disc,
-              tracks: [],
+        tracks &&
+          tracks.forEach((track) => {
+            if (!discs[track.disc]) {
+              discs[track.disc] = {
+                discNumber: track.disc,
+                tracks: [],
+              };
             }
-          }
-          discs[track.disc].tracks.push(track)
-        })
+            discs[track.disc].tracks.push(track);
+          });
 
-        return Object.values(discs)
+        return Object.values(discs);
       }
     </script>
   </body>

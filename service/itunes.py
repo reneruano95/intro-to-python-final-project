@@ -77,14 +77,22 @@ def get_tracks(album: Album) -> None:
         album.tracks = []
 
 
-# # get albums
-# def get_album(album_name: str, limit: int) -> Album:
-#     params: dict[str, str | int] = {
-#         "term": album_name,
-#         "entity": "album",
-#         "limit": limit,
-#     }
-#     pass
+# get albums
+def get_albums(album_name: str, limit: int) -> list[Album]:
+    params: dict[str, str | int] = {
+        "term": album_name,
+        "entity": "album",
+        "limit": limit,
+    }
+    res = requests.get("https://itunes.apple.com/search", params=params)
+    if res.status_code == 200:
+        data = res.json()
+        albums = data.get("results", [])
+        logger.info(f"Loaded {len(albums)} albums from iTunes")
+        return [map_album(x) for x in albums]
+    else:
+        logger.error(f"get_album failed on {album_name}: {res.status_code}")
+        return []
 
 
 @cache_artist
@@ -93,3 +101,10 @@ def search_artist(artist_name: str, limit: int) -> Artist:
     for album in artist.albums:
         get_tracks(album)
     return artist
+
+
+def search_albums(album_name: str, limit: int) -> list[Album]:
+    albums = get_albums(album_name, limit)
+    for album in albums:
+        get_tracks(album)
+    return albums
