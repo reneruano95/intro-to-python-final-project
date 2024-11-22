@@ -41,17 +41,21 @@ def get_artist(artist_name: str, limit: int) -> Artist:
         albums = data.get("results", [])
         if len(albums) > 0:
             artist_name = albums[0]["artistName"]
+            artist_view_url = albums[0]["artistViewUrl"]
+            artist_id = albums[0]["artistId"]
         logger.info(
             f"""Loaded {len(albums)} {
             artist_name} albums from iTunes"""
         )
-        return Artist(artist_name, [map_album(x) for x in albums])
+        return Artist(
+            artist_id, artist_name, artist_view_url, [map_album(x) for x in albums]
+        )
     else:
         logger.error(
             f"""get_artist failed on {
             artist_name}: {res.status_code}"""
         )
-        return Artist(artist_name, [])
+        return Artist(0, artist_name, "", [])
 
 
 def get_tracks(album: Album) -> None:
@@ -71,6 +75,16 @@ def get_tracks(album: Album) -> None:
             album.id}: {res.status_code}"""
         )
         album.tracks = []
+
+
+# # get albums
+# def get_album(album_name: str, limit: int) -> Album:
+#     params: dict[str, str | int] = {
+#         "term": album_name,
+#         "entity": "album",
+#         "limit": limit,
+#     }
+#     pass
 
 
 @cache_artist
