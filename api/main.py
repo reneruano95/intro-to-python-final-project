@@ -1,6 +1,8 @@
 import logging
 import re
 from fastapi import FastAPI, HTTPException, Request, responses, templating
+from fastapi.staticfiles import StaticFiles
+from pathlib import Path
 from model.artist import Artist
 from service.itunes import search_artist, search_albums, search_tracks
 
@@ -25,11 +27,22 @@ templates = templating.Jinja2Templates(directory="templates")
 # Configure the FastAPI app to serve the API and the home page
 app = FastAPI()
 
+app.mount(
+    "/static",
+    StaticFiles(directory=Path(__file__).parent.parent.absolute() / "static"),
+    name="static",
+)
+
 
 # Serves the home page at / using the Jinja2 template engine
 @app.get("/", response_class=responses.HTMLResponse)
 async def home(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+    return templates.TemplateResponse(
+        "index.html",
+        {
+            "request": request,
+        },
+    )
 
 
 # API route to get a list of albums for an artist
