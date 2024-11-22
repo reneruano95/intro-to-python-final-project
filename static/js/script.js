@@ -29,14 +29,12 @@ async function searchAlbums() {
   try {
     searchButton.disabled = true;
     artistInput.disabled = true;
-    // const response = await fetch(
-    //   `/artist/${encodeURIComponent(artistName)}`
-    // )
+    const response = await fetch(`/artist/${encodeURIComponent(artistName)}`);
     // const response = await fetch(
     //   `/albums/${encodeURIComponent(artistName)}`
     // );
 
-    const response = await fetch(`/tracks/${encodeURIComponent(artistName)}`);
+    // const response = await fetch(`/tracks/${encodeURIComponent(artistName)}`);
 
     const data = await response.json();
     if (response.ok) {
