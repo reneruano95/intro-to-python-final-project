@@ -1,53 +1,67 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const artistInput = document.getElementById("artist-name");
+  const searchInput = document.getElementById("search-input");
   const searchButton = document.querySelector("button");
 
   searchButton.addEventListener("click", () => {
     searchAlbums();
   });
 
-  artistInput.addEventListener("keydown", (event) => {
+  searchInput.addEventListener("keydown", (event) => {
     if (event.key === "Enter") {
       event.preventDefault(); // Prevent form submission if inside a form
       searchAlbums();
     }
   });
 
-  artistInput.focus();
+  searchInput.focus();
 });
 
 async function searchAlbums() {
-  const artistInput = document.getElementById("artist-name");
+  const searchInput = document.getElementById("search-input");
   const searchButton = document.querySelector("button");
+  const searchTypeSelect = document.getElementById("search-type");
 
-  const artistName = artistInput?.value.trim();
-  if (!artistName) {
-    alert("Please enter an artist name.");
+  const searchType = searchTypeSelect?.value;
+  const searchTerm = searchInput?.value.trim();
+
+  if (!searchTerm || searchType === "none") {
+    alert(`Pease enter a valid parameter to search for ${searchType}.`);
     return;
   }
 
   try {
     searchButton.disabled = true;
-    artistInput.disabled = true;
-    const response = await fetch(`/artist/${encodeURIComponent(artistName)}`);
-    // const response = await fetch(
-    //   `/albums/${encodeURIComponent(artistName)}`
-    // );
+    searchInput.disabled = true;
+    searchTypeSelect.disabled = true;
 
-    // const response = await fetch(`/tracks/${encodeURIComponent(artistName)}`);
+    let response;
+    switch (searchType) {
+      case "artists":
+        response = await fetch(`/artist/${encodeURIComponent(searchTerm)}`);
+        break;
+      case "albums":
+        response = await fetch(`/albums/${encodeURIComponent(searchTerm)}`);
+        break;
+      case "tracks":
+        response = await fetch(`/tracks/${encodeURIComponent(searchTerm)}`);
+        break;
+      default:
+        throw new Error("Invalid search type.");
+    }
 
     const data = await response.json();
     if (response.ok) {
-      displayAlbums(data);
-      artistInput.value = "";
+      // displayAlbums(data);
+      searchInput.value = "";
+      console.log(data);
     } else alert(data.detail ?? "Oops! Something failed. Please try again.");
   } catch (error) {
     console.error("Error:", error);
-    alert("Could not retrieve albums. Please try again later.");
+    alert(`Could not retrieve ${searchType}. Please try again later.`);
   } finally {
     searchButton.disabled = false;
-    artistInput.disabled = false;
-    artistInput.focus();
+    searchInput.disabled = false;
+    searchInput.focus();
   }
 }
 

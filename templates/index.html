@@ -20,8 +20,12 @@
       <h1 class="mb-3 mt-2">Music Catalog</h1>
       <div class="row">
         <div class="col-2">
-          <select class="form-select" aria-label="Default select example">
-            <option selected>Search by</option>
+          <select
+            class="form-select"
+            aria-label="Default select example"
+            id="search-type"
+          >
+            <option selected disabled value="none">Search by</option>
             <option value="tracks">Tracks</option>
             <option value="albums">Albums</option>
             <option value="artist">Artists</option>
@@ -32,7 +36,7 @@
           <input
             type="text"
             class="form-control"
-            id="artist-name"
+            id="search-input"
             placeholder="Search by..."
             aria-label="Search by..."
             aria-describedby="button-addon2"
