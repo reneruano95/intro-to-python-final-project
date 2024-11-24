@@ -17,14 +17,13 @@ async def home(request: Request):
 @app.get("/artist/{name}")
 def get_artist(
     name: str, 
-    page: Optional[int] = Query(1, ge=1),
-    page_size: Optional[int] = Query(3, ge=1, le=20)
+    page: int = Query(1, ge=1),
+    page_size: int = Query(3, ge=1, le=20)
 ):
     if match := re.search(r"([A-Za-z]{2,20})[^A-Za-z]*([A-Za-z]{0,20})", name.strip().lower()):
         artist_name = " ".join(match.groups())
         # Fetch more results than page_size to support pagination
-        artist = search_artist(artist_name, page_size * 2)
-        
+        artist = search_artist(artist_name, page_size * 2)  # TODO: fetch more results with the advanced search
         # Calculate pagination
         total_albums = len(artist.albums)  # Get total number of albums
         start_idx = (page - 1) * page_size
