@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -5,6 +6,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Music Catalog</title>
     <style>
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  gap: 10px;
+}
+
+.pagination button {
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.pagination button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.pagination-info {
+  margin: 0 15px;
+  color: #666;
+}
       body {
         font-family: Arial, sans-serif;
         background-color: #f0f0f0;
@@ -178,137 +206,178 @@
       <div class="albums" id="albums">
         <!-- Album entries will be inserted here dynamically -->
       </div>
+      
+      <div class="pagination" id="pagination">
+        <!-- Pagination controls will be inserted here dynamically -->
+      </div>
     </div>
-
+    
     <script>
+      // Define variables in a scope that won't show on the page
+      const state = {
+        currentPage: 1,
+        pageSize: 3,
+        currentArtist: '',
+        totalPages: 0
+      };
+    
       document.addEventListener("DOMContentLoaded", () => {
-        const artistInput = document.getElementById("artist-name")
-        const searchButton = document.querySelector("button")
-
+        const artistInput = document.getElementById("artist-name");
+        const searchButton = document.querySelector("button");
+    
         searchButton.addEventListener("click", () => {
-          searchAlbums()
-        })
-
+          state.currentPage = 1;  // Reset page on new search
+          searchAlbums();
+        });
+    
         artistInput.addEventListener("keydown", (event) => {
           if (event.key === "Enter") {
-            event.preventDefault() // Prevent form submission if inside a form
-            searchAlbums()
+            event.preventDefault();
+            state.currentPage = 1;  // Reset page on new search
+            searchAlbums();
           }
-        })
-
-        artistInput.focus()
-      })
-
+        });
+    
+        artistInput.focus();
+      });
+    
       async function searchAlbums() {
-        const artistInput = document.getElementById("artist-name")
-        const searchButton = document.querySelector("button")
-
-        const artistName = artistInput?.value.trim()
+        const artistInput = document.getElementById("artist-name");
+        const searchButton = document.querySelector("button");
+    
+        const artistName = artistInput?.value.trim();
         if (!artistName) {
-          alert("Please enter an artist name.")
-          return
+          alert("Please enter an artist name.");
+          return;
         }
-
+    
+        state.currentArtist = artistName;
+    
         try {
-          searchButton.disabled = true
-          artistInput.disabled = true
+          searchButton.disabled = true;
+          artistInput.disabled = true;
           const response = await fetch(
-            `/artist/${encodeURIComponent(artistName)}`
-          )
-          const data = await response.json()
+            `/artist/${encodeURIComponent(artistName)}?page=${state.currentPage}&page_size=${state.pageSize}`
+          );
+          const data = await response.json();
           if (response.ok) {
-            displayAlbums(data)
-            artistInput.value = ""
+            displayAlbums(data);
+            updatePagination(data.pagination);
+          } else {
+            alert(data.detail ?? "Oops! Something failed. Please try again.");
           }
-          else 
-            alert(data.detail ?? "Oops! Something failed. Please try again.")
         } catch (error) {
-          console.error("Error:", error)
-          alert("Could not retrieve albums. Please try again later.")
+          console.error("Error:", error);
+          alert("Could not retrieve albums. Please try again later.");
         } finally {
-          searchButton.disabled = false
-          artistInput.disabled = false
-          artistInput.focus()
+          searchButton.disabled = false;
+          artistInput.disabled = false;
+          artistInput.focus();
         }
       }
-
-      function displayAlbums(data) {
-        const albumsContainer = document.getElementById("albums")
-        albumsContainer.innerHTML = "" // Clear any existing content
-
-        if (data.albums.length === 0) {
-          albumsContainer.innerHTML = "<p>No albums found for this artist.</p>"
-          return
+    
+      function updatePagination(pagination) {
+        const paginationContainer = document.getElementById("pagination");
+        state.totalPages = pagination.total_pages;
+    
+        paginationContainer.innerHTML = `
+          <button 
+            onclick="changePage(${state.currentPage - 1})" 
+            ${state.currentPage <= 1 ? 'disabled' : ''}
+          >Previous</button>
+          <span class="pagination-info">Page ${state.currentPage} of ${state.totalPages}</span>
+          <button 
+            onclick="changePage(${state.currentPage + 1})" 
+            ${state.currentPage >= state.totalPages ? 'disabled' : ''}
+          >Next</button>
+        `;
+      }
+    
+      async function changePage(newPage) {
+        if (newPage >= 1 && newPage <= state.totalPages) {
+          state.currentPage = newPage;
+          await searchAlbums();
+          window.scrollTo(0, 0);
         }
-
-        data.albums && data.albums.forEach((album) => {
-          const albumElement = document.createElement("div")
-          albumElement.classList.add("album")
-
-          const discs = groupTracksByDisc(album.tracks)
-
+      }
+    
+      function displayAlbums(data) {
+        const albumsContainer = document.getElementById("albums");
+        albumsContainer.innerHTML = "";
+    
+        if (!data.artist.albums || data.artist.albums.length === 0) {
+          albumsContainer.innerHTML = "<p>No albums found for this artist.</p>";
+          return;
+        }
+    
+        data.artist.albums.forEach((album) => {
+          const albumElement = document.createElement("div");
+          albumElement.classList.add("album");
+    
+          const discs = groupTracksByDisc(album.tracks);
+    
           const discSections = discs
             .map(
               (disc) => `
-          <div class="disc-section">
-              <h3>Disc ${disc.discNumber}</h3>
-              <div class="track-list">
-                  ${disc.tracks
-                    .map(
-                      (track) => `
-                      <div class="track">
+                <div class="disc-section">
+                  <h3>Disc ${disc.discNumber}</h3>
+                  <div class="track-list">
+                    ${disc.tracks
+                      .map(
+                        (track) => `
+                        <div class="track">
                           <div class="track-number">${track.number}</div>
                           <div class="track-name">${track.name}</div>
-                          <div class="track-time">${(
-                            track.time_millis / 60000
-                          ).toFixed(2)}
-                          </div>
+                          <div class="track-time">${(track.time_millis / 60000).toFixed(
+                            2
+                          )}</div>
                           <div class="track-preview">
-                              ${track.preview_url ? `
-                              <audio class="audio-player" controls src="${
-                                track.preview_url
-                              }" />` : ""}
+                            ${
+                              track.preview_url
+                                ? `<audio class="audio-player" controls src="${track.preview_url}" />`
+                                : ""
+                            }
                           </div>
-                      </div>
-                  `
-                    )
-                    .join("")}
-              </div>
-          </div>
-      `
-            )
-            .join("")
-
-          albumElement.innerHTML = `
-                <img src="${album.image_url.replace(
-                  "100x100",
-                  "600x600"
-                )}" alt="Album Cover">
-                <div class="album-info">
-                    <h2>${album.title}</h2>
-                    <p>${data.name}</p>
-                    ${discSections}
+                        </div>
+                      `
+                      )
+                      .join("")}
+                  </div>
                 </div>
-            `
-
-          albumsContainer.appendChild(albumElement)
-        })
+              `
+            )
+            .join("");
+    
+          albumElement.innerHTML = `
+            <img src="${album.image_url.replace(
+              "100x100",
+              "600x600"
+            )}" alt="Album Cover">
+            <div class="album-info">
+              <h2>${album.title}</h2>
+              <p>${data.artist.name}</p>
+              ${discSections}
+            </div>
+          `;
+    
+          albumsContainer.appendChild(albumElement);
+        });
       }
-
+    
       function groupTracksByDisc(tracks) {
-        const discs = {}
-
+        const discs = {};
+    
         tracks && tracks.forEach((track) => {
           if (!discs[track.disc]) {
             discs[track.disc] = {
               discNumber: track.disc,
               tracks: [],
-            }
+            };
           }
-          discs[track.disc].tracks.push(track)
-        })
-
-        return Object.values(discs)
+          discs[track.disc].tracks.push(track);
+        });
+    
+        return Object.values(discs);
       }
     </script>
   </body>
