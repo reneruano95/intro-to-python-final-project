@@ -21,13 +21,29 @@ async function searchAlbums() {
   const searchButton = document.querySelector("button");
   const searchTypeSelect = document.getElementById("search-type");
 
+  const releaseDateInput = document.getElementById("release-date");
+  const minDurationInput = document.getElementById("min-duration");
+  const maxDurationInput = document.getElementById("max-duration");
+
   const searchType = searchTypeSelect?.value;
   const searchTerm = searchInput?.value.trim();
+
+  const releaseDate = releaseDateInput?.value;
+  const minDuration = minDurationInput?.value * 60000; // Convert to milliseconds
+  const maxDuration = maxDurationInput?.value * 60000; // Convert to milliseconds
 
   if (!searchTerm || searchType === "none") {
     alert(`Pease enter a valid parameter to search for ${searchType}.`);
     return;
   }
+
+  let queryParams = `${encodeURIComponent(searchTerm)}`;
+  if (releaseDate)
+    queryParams += `&release_date=${encodeURIComponent(releaseDate)}`;
+  if (minDuration)
+    queryParams += `&min_duration=${encodeURIComponent(minDuration)}`;
+  if (maxDuration)
+    queryParams += `&max_duration=${encodeURIComponent(maxDuration)}`;
 
   try {
     searchButton.disabled = true;
@@ -40,7 +56,7 @@ async function searchAlbums() {
         response = await fetch(`/artist/${encodeURIComponent(searchTerm)}`);
         break;
       case "albums":
-        response = await fetch(`/albums/${encodeURIComponent(searchTerm)}`);
+        response = await fetch(`/albums/${queryParams}`);
         break;
       case "tracks":
         response = await fetch(`/tracks/${encodeURIComponent(searchTerm)}`);
@@ -53,14 +69,24 @@ async function searchAlbums() {
     if (response.ok) {
       // displayAlbums(data);
       searchInput.value = "";
+      releaseDateInput.value = "";
+      minDurationInput.value = "";
+      maxDurationInput.value = "";
+
       console.log(data);
     } else alert(data.detail ?? "Oops! Something failed. Please try again.");
   } catch (error) {
     console.error("Error:", error);
     alert(`Could not retrieve ${searchType}. Please try again later.`);
   } finally {
+    searchTypeSelect.disabled = false;
     searchButton.disabled = false;
     searchInput.disabled = false;
+
+    searchTypeSelect.disabled = false;
+    releaseDateInput.disabled = false;
+    minDurationInput.disabled = false;
+    maxDurationInput.disabled = false;
     searchInput.focus();
   }
 }

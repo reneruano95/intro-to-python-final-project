@@ -1,10 +1,16 @@
 import logging
 import re
-from fastapi import FastAPI, HTTPException, Request, responses, templating
+from typing import Optional
+from fastapi import FastAPI, HTTPException, Request, responses, templating, Query
 from fastapi.staticfiles import StaticFiles
 from pathlib import Path
 from model.artist import Artist
-from service.itunes import search_artist, search_albums, search_tracks
+from service.itunes import (
+    search_artist,
+    search_albums,
+    search_tracks,
+    search_artist_by_album,
+)
 
 """
 This is the main entry point for the application.
@@ -68,7 +74,18 @@ def get_artist(name: str):
 
 # - API route to get a list of albums by name
 @app.get("/albums/{album_name}")
-def get_albums(album_name: str):
+def get_albums(
+    album_name: str,
+    release_date: Optional[str] = Query(
+        None, description="Release date in YYYY-MM-DD format"
+    ),
+    min_duration: Optional[int] = Query(
+        None, description="Minimum track duration in seconds"
+    ),
+    max_duration: Optional[int] = Query(
+        None, description="Maximum track duration in seconds"
+    ),
+):
     # Here we would call the AlbumService to get a list of albums
     if match := re.search(
         r"([A-Za-z]{2,20})[^A-Za-z]*([A-Za-z]{0,20})", album_name.strip().lower()
@@ -76,6 +93,23 @@ def get_albums(album_name: str):
         album_name = " ".join(match.groups())
         # should we pass in the limit in the querystring?
         albums = search_albums(album_name, 3)
+
+        # Filter albums based on release date and track duration if provided
+        if release_date:
+            albums = [album for album in albums if album.release_date == release_date]
+        if min_duration:
+            albums = [
+                album
+                for album in albums
+                if any(track.time_millis >= min_duration for track in album.tracks)
+            ]
+        if max_duration:
+            albums = [
+                album
+                for album in albums
+                if any(track.time_millis <= max_duration for track in album.tracks)
+            ]
+
         # print(albums)
         return albums
     else:
