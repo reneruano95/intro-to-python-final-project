@@ -3,7 +3,7 @@ import logging
 from dataclasses import asdict
 from model.artist import Artist
 from pathlib import Path
-from typing import Callable
+from typing import Callable, List
 
 logger = logging.getLogger(__name__)
 
@@ -48,7 +48,6 @@ def save_artist(artist: Artist):
             {
                 "id": artist.id,
                 "name": artist.name,
-                "artist_view_url": artist.artist_view_url,
                 "albums": [asdict(album) for album in artist.albums],
             },
             file,

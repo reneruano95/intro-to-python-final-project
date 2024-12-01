@@ -229,62 +229,76 @@ function displayArtists(data) {
   const albumsContainer = document.getElementById("albums");
   albumsContainer.innerHTML = ""; // Clear any existing content
 
-  if (!data.albums || data.albums.length === 0) {
-    albumsContainer.innerHTML = "<p>No albums found for this artist.</p>";
+  if (!data || data.length === 0) {
+    albumsContainer.innerHTML = "<p>No artists found.</p>";
     return;
   }
 
-  data.albums.forEach((album) => {
-    const albumElement = document.createElement("div");
-    albumElement.classList.add("album");
+  data.forEach((artist) => {
+    const artistElement = document.createElement("div");
+    artistElement.classList.add("artist");
 
-    const discs = groupTracksByDisc(album.tracks);
+    artistElement.innerHTML = `
+      <h2>${artist.name}</h2>
+    `;
 
-    const discSections = discs
-      .map(
-        (disc) => `
-      <div class="disc-section">
-          <h3>Disc ${disc.discNumber}</h3>
-          <div class="track-list">
-              ${disc.tracks
-                .map(
-                  (track) => `
-                  <div class="track">
-                      <div class="track-number">${track.number}</div>
-                      <div class="track-name">${track.name}</div>
-                      <div class="track-time">${(
-                        track.time_millis / 60000
-                      ).toFixed(2)}
+    if (!artist.albums || artist.albums.length === 0) {
+      artistElement.innerHTML += "<p>No albums found for this artist.</p>";
+    } else {
+      artist.albums.forEach((album) => {
+        const albumElement = document.createElement("div");
+        albumElement.classList.add("album");
+
+        const discs = groupTracksByDisc(album.tracks);
+
+        const discSections = discs
+          .map(
+            (disc) => `
+          <div class="disc-section">
+              <h3>Disc ${disc.discNumber}</h3>
+              <div class="track-list">
+                  ${disc.tracks
+                    .map(
+                      (track) => `
+                      <div class="track">
+                          <div class="track-number">${track.number}</div>
+                          <div class="track-name">${track.name}</div>
+                          <div class="track-time">${(
+                            track.time_millis / 60000
+                          ).toFixed(2)}
+                          </div>
+                          <div class="track-preview">
+                              ${
+                                track.preview_url
+                                  ? `<audio class="audio-player" controls src="${track.preview_url}" />`
+                                  : ""
+                              }
+                          </div>
                       </div>
-                      <div class="track-preview">
-                          ${
-                            track.preview_url
-                              ? `<audio class="audio-player" controls src="${track.preview_url}" />`
-                              : ""
-                          }
-                      </div>
-                  </div>
-              `
-                )
-                .join("")}
+                  `
+                    )
+                    .join("")}
+              </div>
           </div>
-      </div>
-  `
-      )
-      .join("");
+      `
+          )
+          .join("");
 
-    albumElement.innerHTML = `
-            <img src="${album.image_url.replace(
-              "100x100",
-              "600x600"
-            )}" alt="Album Cover">
-            <div class="album-info">
-                <h2>${album.title}</h2>
-                <p>${data.name}</p>
-                ${discSections}
-            </div>
-        `;
+        albumElement.innerHTML = `
+                <img src="${album.image_url.replace(
+                  "100x100",
+                  "600x600"
+                )}" alt="Album Cover">
+                <div class="album-info">
+                    <h3>${album.title}</h3>
+                    ${discSections}
+                </div>
+            `;
 
-    albumsContainer.appendChild(albumElement);
+        artistElement.appendChild(albumElement);
+      });
+    }
+
+    albumsContainer.appendChild(artistElement);
   });
 }

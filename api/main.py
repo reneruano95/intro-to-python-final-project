@@ -6,10 +6,9 @@ from fastapi.staticfiles import StaticFiles
 from pathlib import Path
 from model.artist import Artist
 from service.itunes import (
-    search_artist,
+    search_artists,
     search_albums,
     search_tracks,
-    search_artist_by_album,
 )
 
 """
@@ -53,13 +52,13 @@ async def home(request: Request):
 
 # API route to get a list of albums for an artist
 @app.get("/artist/{name}")
-def get_artist(name: str):
+def get_artists(name: str):
     if match := re.search(
         r"([A-Za-z]{2,20})[^A-Za-z]*([A-Za-z]{0,20})", name.strip().lower()
     ):
         artist_name = " ".join(match.groups())
         # should we pass in the limit in the querystring?
-        artist = search_artist(artist_name, 3)
+        artist = search_artists(artist_name, 3)
         # print(artist)
         return artist
     else:

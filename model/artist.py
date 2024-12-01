@@ -8,7 +8,7 @@ from model.album import Album
 class Artist:
     id: int
     name: str
-    artist_view_url: str
+    # artist_view_url: str
     albums: List[Album] = field(default_factory=list)
 
     def __str__(self):
