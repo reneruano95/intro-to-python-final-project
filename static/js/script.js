@@ -67,7 +67,17 @@ async function searchAlbums() {
 
     const data = await response.json();
     if (response.ok) {
-      // displayAlbums(data);
+      switch (searchType) {
+        case "artists":
+          displayArtists(data);
+          break;
+        case "albums":
+          displayAlbums(data);
+          break;
+        case "tracks":
+          displayTracks(data);
+          break;
+      }
       searchInput.value = "";
       releaseDateInput.value = "";
       minDurationInput.value = "";
@@ -77,6 +87,7 @@ async function searchAlbums() {
     } else alert(data.detail ?? "Oops! Something failed. Please try again.");
   } catch (error) {
     console.error("Error:", error);
+
     alert(`Could not retrieve ${searchType}. Please try again later.`);
   } finally {
     searchTypeSelect.disabled = false;
@@ -87,6 +98,7 @@ async function searchAlbums() {
     releaseDateInput.disabled = false;
     minDurationInput.disabled = false;
     maxDurationInput.disabled = false;
+
     searchInput.focus();
   }
 }
@@ -95,21 +107,20 @@ function displayAlbums(data) {
   const albumsContainer = document.getElementById("albums");
   albumsContainer.innerHTML = ""; // Clear any existing content
 
-  if (data.albums.length === 0) {
-    albumsContainer.innerHTML = "<p>No albums found for this artist.</p>";
+  if (!data || data.length === 0) {
+    albumsContainer.innerHTML = "<p>No albums found.</p>";
     return;
   }
 
-  data.albums &&
-    data.albums.forEach((album) => {
-      const albumElement = document.createElement("div");
-      albumElement.classList.add("album");
+  data.forEach((album) => {
+    const albumElement = document.createElement("div");
+    albumElement.classList.add("album");
 
-      const discs = groupTracksByDisc(album.tracks);
+    const discs = groupTracksByDisc(album.tracks);
 
-      const discSections = discs
-        .map(
-          (disc) => `
+    const discSections = discs
+      .map(
+        (disc) => `
       <div class="disc-section">
           <h3>Disc ${disc.discNumber}</h3>
           <div class="track-list">
@@ -126,8 +137,7 @@ function displayAlbums(data) {
                       <div class="track-preview">
                           ${
                             track.preview_url
-                              ? `
-                          <audio class="audio-player" controls src="${track.preview_url}" />`
+                              ? `<audio class="audio-player" controls src="${track.preview_url}" />`
                               : ""
                           }
                       </div>
@@ -138,23 +148,23 @@ function displayAlbums(data) {
           </div>
       </div>
   `
-        )
-        .join("");
+      )
+      .join("");
 
-      albumElement.innerHTML = `
+    albumElement.innerHTML = `
             <img src="${album.image_url.replace(
               "100x100",
               "600x600"
             )}" alt="Album Cover">
             <div class="album-info">
                 <h2>${album.title}</h2>
-                <p>${data.name}</p>
+                <p>${album.artist_name}</p>
                 ${discSections}
             </div>
         `;
 
-      albumsContainer.appendChild(albumElement);
-    });
+    albumsContainer.appendChild(albumElement);
+  });
 }
 
 function groupTracksByDisc(tracks) {
@@ -172,4 +182,99 @@ function groupTracksByDisc(tracks) {
     });
 
   return Object.values(discs);
+}
+
+function displayTracks(data) {
+  const albumsContainer = document.getElementById("albums");
+  albumsContainer.innerHTML = ""; // Clear any existing content
+
+  if (data.length === 0) {
+    albumsContainer.innerHTML = "<p>No tracks found.</p>";
+    return;
+  }
+
+  data.forEach((track) => {
+    const trackElement = document.createElement("div");
+    trackElement.classList.add("track");
+
+    trackElement.innerHTML = `
+      <div class="track-info">
+        <h2>${track.name}</h2>
+        <p>Artist: ${track.artist_name}</p>
+        <p>Album: ${track.album_name}</p>
+        <p>Duration: ${(track.time_millis / 60000).toFixed(2)} minutes</p>
+        ${
+          track.preview_url
+            ? `<audio class="audio-player" controls src="${track.preview_url}"></audio>`
+            : ""
+        }
+      </div>
+    `;
+
+    albumsContainer.appendChild(trackElement);
+  });
+}
+
+function displayArtists(data) {
+  const albumsContainer = document.getElementById("albums");
+  albumsContainer.innerHTML = ""; // Clear any existing content
+
+  if (!data.albums || data.albums.length === 0) {
+    albumsContainer.innerHTML = "<p>No albums found for this artist.</p>";
+    return;
+  }
+
+  data.albums.forEach((album) => {
+    const albumElement = document.createElement("div");
+    albumElement.classList.add("album");
+
+    const discs = groupTracksByDisc(album.tracks);
+
+    const discSections = discs
+      .map(
+        (disc) => `
+      <div class="disc-section">
+          <h3>Disc ${disc.discNumber}</h3>
+          <div class="track-list">
+              ${disc.tracks
+                .map(
+                  (track) => `
+                  <div class="track">
+                      <div class="track-number">${track.number}</div>
+                      <div class="track-name">${track.name}</div>
+                      <div class="track-time">${(
+                        track.time_millis / 60000
+                      ).toFixed(2)}
+                      </div>
+                      <div class="track-preview">
+                          ${
+                            track.preview_url
+                              ? `<audio class="audio-player" controls src="${track.preview_url}" />`
+                              : ""
+                          }
+                      </div>
+                  </div>
+              `
+                )
+                .join("")}
+          </div>
+      </div>
+  `
+      )
+      .join("");
+
+    albumElement.innerHTML = `
+            <img src="${album.image_url.replace(
+              "100x100",
+              "600x600"
+            )}" alt="Album Cover">
+            <div class="album-info">
+                <h2>${album.title}</h2>
+                <p>${data.name}</p>
+                ${discSections}
+            </div>
+        `;
+
+    albumsContainer.appendChild(albumElement);
+  });
 }
