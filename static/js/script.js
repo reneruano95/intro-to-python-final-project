@@ -1,6 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
   const searchInput = document.getElementById("search-input");
   const searchButton = document.querySelector("button");
+  const searchTypeSelect = document.getElementById("search-type");
+  const advancedSearchContainer = document.getElementById("advanced-search");
 
   searchButton.addEventListener("click", () => {
     searchAlbums();
@@ -10,6 +12,14 @@ document.addEventListener("DOMContentLoaded", () => {
     if (event.key === "Enter") {
       event.preventDefault(); // Prevent form submission if inside a form
       searchAlbums();
+    }
+  });
+
+  searchTypeSelect.addEventListener("change", () => {
+    if (searchTypeSelect.value === "albums") {
+      advancedSearchContainer.style.display = "block";
+    } else {
+      advancedSearchContainer.style.display = "none";
     }
   });
 
