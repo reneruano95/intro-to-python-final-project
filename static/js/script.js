@@ -234,68 +234,51 @@ function displayArtists(data) {
     return;
   }
 
-  data.forEach((artist) => {
+  data.forEach((artist, index) => {
     const artistElement = document.createElement("div");
     artistElement.classList.add("artist");
 
+    const artistId = `artist-${index}`;
+
     artistElement.innerHTML = `
-      <h2>${artist.name}</h2>
+      <h2 class="mt-1 d-flex justify-content-between">
+        <a class="link-dark link-underline-opacity-0" data-bs-toggle="collapse" href="#${artistId}" role="button" aria-expanded="false" aria-controls="${artistId}">
+          ${artist.name}
+        </a>
+        <div>(${artist.albums.length} albums)</div>
+      </h2>
+      <div class="collapse" id="${artistId}">
+        <div class="card card-body">
+          ${
+            artist.albums.length === 0
+              ? "<p>No albums found for this artist.</p>"
+              : ""
+          }
+        </div>
+      </div>
     `;
 
-    if (!artist.albums || artist.albums.length === 0) {
-      artistElement.innerHTML += "<p>No albums found for this artist.</p>";
-    } else {
+    const collapseContainer = artistElement.querySelector(".card-body");
+
+    if (artist.albums.length > 0) {
       artist.albums.forEach((album) => {
         const albumElement = document.createElement("div");
         albumElement.classList.add("album");
 
-        const discs = groupTracksByDisc(album.tracks);
-
-        const discSections = discs
-          .map(
-            (disc) => `
-          <div class="disc-section">
-              <h3>Disc ${disc.discNumber}</h3>
-              <div class="track-list">
-                  ${disc.tracks
-                    .map(
-                      (track) => `
-                      <div class="track">
-                          <div class="track-number">${track.number}</div>
-                          <div class="track-name">${track.name}</div>
-                          <div class="track-time">${(
-                            track.time_millis / 60000
-                          ).toFixed(2)}
-                          </div>
-                          <div class="track-preview">
-                              ${
-                                track.preview_url
-                                  ? `<audio class="audio-player" controls src="${track.preview_url}" />`
-                                  : ""
-                              }
-                          </div>
-                      </div>
-                  `
-                    )
-                    .join("")}
-              </div>
-          </div>
-      `
-          )
-          .join("");
-
         albumElement.innerHTML = `
-                <img src="${album.image_url.replace(
-                  "100x100",
-                  "600x600"
-                )}" alt="Album Cover">
-                <div class="album-info">
-                    <h3>${album.title}</h3>
-                    ${discSections}
-                </div>
-            `;
+          <img src="${album.image_url.replace(
+            "100x100",
+            "600x600"
+          )}" alt="Album Cover">
+          <div class="album-info">
+            <h3>${album.title}</h3>
+            <p>Release Date: ${new Date(
+              album.release_date
+            ).toLocaleDateString()}</p>
+          </div>
+        `;
 
-        artistElement.appendChild(albumElement);
+        collapseContainer.appendChild(albumElement);
       });
     }
 

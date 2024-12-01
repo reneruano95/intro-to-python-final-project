@@ -193,8 +193,6 @@ def search_artists(artist_name: str, limit: int) -> list[Artist]:
     artist = get_artists(artist_name, limit)
     for a in artist:
         get_albums_by_artist(a)
-        for album in a.albums:
-            get_tracks_by_album(album)
 
     return artist
 
