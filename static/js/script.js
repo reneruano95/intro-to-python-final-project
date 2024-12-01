@@ -132,7 +132,7 @@ function displayAlbums(data) {
       .map(
         (disc) => `
       <div class="disc-section">
-          <h3>Disc ${disc.discNumber}</h3>
+          <h3>Genre ${album.genre}</h3>
           <div class="track-list">
               ${disc.tracks
                 .map(

@@ -21,6 +21,7 @@ def map_album(data) -> Album:
     return Album(
         id=data["collectionId"],
         artist_id=data["artistId"],
+        artist_name=data["artistName"],
         title=data["collectionName"],
         image_url=data["artworkUrl100"],
         genre=data["primaryGenreName"],

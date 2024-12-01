@@ -7,6 +7,7 @@ from model.track import Track
 class Album:
     id: int
     artist_id: int
+    artist_name: str
     title: str
     release_date: str
     image_url: str
