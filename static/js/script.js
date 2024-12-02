@@ -122,7 +122,7 @@ function displayAlbums(data) {
     return;
   }
 
-  data.forEach((album) => {
+  data.forEach((album, index) => {
     const albumElement = document.createElement("div");
     albumElement.classList.add("album");
 
@@ -161,17 +161,23 @@ function displayAlbums(data) {
       )
       .join("");
 
+    const albumId = `album-${index}`;
+
     albumElement.innerHTML = `
-            <img src="${album.image_url.replace(
-              "100x100",
-              "600x600"
-            )}" alt="Album Cover">
-            <div class="album-info">
-                <h2>${album.title}</h2>
-                <p>${album.artist_name}</p>
-                ${discSections}
-            </div>
-        `;
+              <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#${albumId}" aria-expanded="false" aria-controls="${albumId}">
+                  <img src="${album.image_url.replace(
+                    "100x100",
+                    "600x600"
+                  )}" alt="Album Cover">
+                  <div class="album-info">
+                      <h2>${album.title}</h2>
+                      <p>${album.artist_name}</p>
+                  </div>
+              </button>
+              <div id="${albumId}" class="collapse">
+                  ${discSections}
+              </div>
+          `;
 
     albumsContainer.appendChild(albumElement);
   });
