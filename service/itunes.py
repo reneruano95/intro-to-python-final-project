@@ -121,26 +121,6 @@ def get_artist_by_track(track: Track) -> Artist:
         )
 
 
-# get tracks by album
-def get_tracks_by_album(album: Album) -> None:
-    params: dict[str, str | int] = {"id": album.id, "entity": "song"}
-    res = requests.get("https://itunes.apple.com/lookup", params=params)
-    if res.status_code == 200:
-        data = res.json()
-        tracks = data.get("results", [])[1:]
-        logger.info(
-            f"""Loaded {len(tracks)} tracks of {
-                    album.title} from iTunes"""
-        )
-        album.tracks = [map_track(x) for x in tracks]
-    else:
-        logger.error(
-            f"""get_tracks failed on {
-            album.id}: {res.status_code}"""
-        )
-        album.tracks = []
-
-
 # get albums by name
 def get_albums(album_name: str, limit: int) -> list[Album]:
     params: dict[str, str | int] = {
@@ -191,6 +171,20 @@ def get_tracks(track_name: str, limit: int) -> list[Track]:
         return []
 
 
+# get tracks by album
+def get_tracks_by_album(album_id) -> list[Track]:
+    params: dict[str, str | int] = {"id": album_id, "entity": "song"}
+    res = requests.get("https://itunes.apple.com/lookup", params=params)
+    if res.status_code == 200:
+        data = res.json()
+        tracks = data.get("results", [])[1:]
+        logger.info(f"Loaded {len(tracks)} tracks of {album_id} from iTunes")
+        return [map_track(x) for x in tracks]
+    else:
+        logger.error(f"get_tracks_by_album failed on {album_id}: {res.status_code}")
+        return []
+
+
 # @cache_artist
 def search_artists(artist_name: str, limit: int) -> list[Artist]:
     artist = get_artists(artist_name, limit)
@@ -221,3 +215,8 @@ def search_albums(album_name: str, limit: int) -> list[Album]:
 
 def search_tracks(track_name: str, limit: int) -> list[Track]:
     return get_tracks(track_name, limit)
+
+
+def search_tracks_by_album(album_id: str) -> list[Track]:
+    tracks = get_tracks_by_album(album_id)
+    return tracks

@@ -9,6 +9,7 @@ from service.itunes import (
     search_artists,
     search_albums,
     search_tracks,
+    search_tracks_by_album,
 )
 
 """
@@ -130,3 +131,11 @@ def get_tracks(track_name: str):
         return tracks
     else:
         raise HTTPException(status_code=400, detail=f"Invalid track name: {track_name}")
+
+
+#  - API route to get a list of tracks by album
+@app.get("/albums/{albumId}/tracks")
+def get_tracks_by_album(albumId: str):
+    # Here we would call the AlbumService to get a list of tracks
+    tracks = search_tracks_by_album(albumId)
+    return tracks

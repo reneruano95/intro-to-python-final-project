@@ -282,12 +282,67 @@ function displayArtists(data) {
               album.release_date
             ).toLocaleDateString()}</p>
           </div>
+          <div class="tracks-container" style="display: none;"></div>
         `;
+
+        albumElement.addEventListener("click", async () => {
+          const tracksContainer =
+            albumElement.querySelector(".tracks-container");
+          if (tracksContainer.style.display === "none") {
+            tracksContainer.style.display = "block";
+            const tracks = await fetchAlbumTracks(album.id);
+            displayTracksInAlbum(tracks, tracksContainer);
+          } else {
+            tracksContainer.style.display = "none";
+          }
+        });
 
         collapseContainer.appendChild(albumElement);
       });
     }
 
     albumsContainer.appendChild(artistElement);
+  });
+}
+
+async function fetchAlbumTracks(albumId) {
+  try {
+    const response = await fetch(`/albums/${albumId}/tracks`);
+    if (!response.ok) {
+      throw new Error("Failed to fetch tracks");
+    }
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching tracks:", error);
+    return [];
+  }
+}
+
+function displayTracksInAlbum(tracks, container) {
+  container.innerHTML = ""; // Clear any existing content
+
+  if (!tracks || tracks.length === 0) {
+    container.innerHTML = "<p>No tracks found for this album.</p>";
+    return;
+  }
+
+  tracks.forEach((track) => {
+    const trackElement = document.createElement("div");
+    trackElement.classList.add("track");
+
+    trackElement.innerHTML = `
+      <div class="track-info">
+        <p>${track.number}. ${track.name} (${(
+      track.time_millis / 60000
+    ).toFixed(2)} minutes)</p>
+        ${
+          track.preview_url
+            ? `<audio class="audio-player" controls src="${track.preview_url}"></audio>`
+            : ""
+        }
+      </div>
+    `;
+
+    container.appendChild(trackElement);
   });
 }
