@@ -62,7 +62,7 @@ def get_artists(name: str):
     if match := re.search(NAME_PATTERN, name.strip().lower()):
         artist_name = " ".join(match.groups())
         # should we pass in the limit in the querystring?
-        artist = search_artists(artist_name, 3)
+        artist = search_artists(artist_name, 10)
         # print(artist)
         return artist
     else:
@@ -109,12 +109,12 @@ def get_albums(
 
     # Join matched name groups
     normalized_name = " ".join(name_match.groups())
-    print(f"Normalized Name: {normalized_name}")
+    # print(f"Normalized Name: {normalized_name}")
 
     # Search albums from iTunes API
     try:
         albums = search_albums(normalized_name, limit)
-        print(f"Albums Retrieved: {albums}")
+        # print(f"Albums Retrieved: {albums}")
     except requests.RequestException as e:
         raise HTTPException(
             status_code=500, detail=f"Error searching iTunes API: {str(e)}"
@@ -123,7 +123,7 @@ def get_albums(
     # Filter albums based on additional criteria
     filtered_albums: list[Album] = []
     for album in albums:
-        print(f"Processing Album: {album}")
+        # print(f"Processing Album: {album}")
         # Release year filter (using release date)
         if release_year:
             release_date = album.release_date
@@ -136,7 +136,7 @@ def get_albums(
         # Genre filter
         if genre:
             album_genre = album.genre.lower()
-            print(f"Album Genre: {album_genre}")
+            # print(f"Album Genre: {album_genre}")
             if genre.lower() not in album_genre:
                 continue
 
@@ -152,7 +152,7 @@ def get_tracks(track_name: str):
     # Here we would call the AlbumService to get a list of tracks
 
     if match := re.search(NAME_PATTERN, track_name.strip().lower()):
-        tracks = search_tracks(track_name, 3)
+        tracks = search_tracks(track_name, 10)
         # print(tracks)
         return tracks
     else:

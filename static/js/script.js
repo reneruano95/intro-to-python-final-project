@@ -273,7 +273,7 @@ function displayArtists(data) {
         albumElement.classList.add("album");
 
         albumElement.innerHTML = `
-        <div class="album">
+        <button class="btn">
           <img src="${album.image_url.replace(
             "100x100",
             "600x600"
@@ -284,7 +284,7 @@ function displayArtists(data) {
               album.release_date
             ).toLocaleDateString()}</p>
           </div>
-        </div>
+        </button>
           <div class="tracks-container" style="display: none;"></div>
         `;
 
