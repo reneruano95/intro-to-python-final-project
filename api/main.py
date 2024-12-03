@@ -83,7 +83,7 @@ def get_albums(
         None, description="Release year in YYYY format", ge=1900, le=2024
     ),
     genre: Optional[str] = Query(None, description="Genre of the album"),
-    limit: int = Query(10, description="Maximum number of results", ge=1, le=100),
+    limit: int = Query(3, description="Maximum number of results", ge=1, le=100),
 ):
     """
     Search for albums with optional filtering and pagination.

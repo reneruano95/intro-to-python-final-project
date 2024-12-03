@@ -33,12 +33,14 @@ async function searchAlbums() {
 
   const releaseYearInput = document.getElementById("release-year");
   const genreInput = document.getElementById("genre");
+  const limitInput = document.getElementById("limit");
 
   const searchType = searchTypeSelect?.value;
   const searchTerm = searchInput?.value.trim();
 
   const releaseYear = releaseYearInput?.value;
   const genre = genreInput?.value.trim();
+  const limit = limitInput?.value;
 
   if (!searchTerm || searchType === "none") {
     alert(`Pease enter a valid parameter to search for ${searchType}.`);
@@ -51,6 +53,9 @@ async function searchAlbums() {
   }
   if (genre) {
     queryParams += `&genre=${encodeURIComponent(genre)}`;
+  }
+  if (limit) {
+    queryParams += `&limit=${encodeURIComponent(limit)}`;
   }
 
   try {
@@ -89,6 +94,7 @@ async function searchAlbums() {
       searchInput.value = "";
       releaseYearInput.value = "";
       genreInput.value = "";
+      limitInput.value = "";
 
       console.log(data);
     } else
