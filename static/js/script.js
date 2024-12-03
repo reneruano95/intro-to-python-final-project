@@ -31,16 +31,14 @@ async function searchAlbums() {
   const searchButton = document.querySelector("button");
   const searchTypeSelect = document.getElementById("search-type");
 
-  const releaseDateInput = document.getElementById("release-date");
-  const minDurationInput = document.getElementById("min-duration");
-  const maxDurationInput = document.getElementById("max-duration");
+  const releaseYearInput = document.getElementById("release-year");
+  const genreInput = document.getElementById("genre");
 
   const searchType = searchTypeSelect?.value;
   const searchTerm = searchInput?.value.trim();
 
-  const releaseDate = releaseDateInput?.value;
-  const minDuration = minDurationInput?.value * 60000; // Convert to milliseconds
-  const maxDuration = maxDurationInput?.value * 60000; // Convert to milliseconds
+  const releaseYear = releaseYearInput?.value;
+  const genre = genreInput?.value.trim();
 
   if (!searchTerm || searchType === "none") {
     alert(`Pease enter a valid parameter to search for ${searchType}.`);
@@ -48,12 +46,9 @@ async function searchAlbums() {
   }
 
   let queryParams = `${encodeURIComponent(searchTerm)}`;
-  if (releaseDate)
-    queryParams += `&release_date=${encodeURIComponent(releaseDate)}`;
-  if (minDuration)
-    queryParams += `&min_duration=${encodeURIComponent(minDuration)}`;
-  if (maxDuration)
-    queryParams += `&max_duration=${encodeURIComponent(maxDuration)}`;
+  if (releaseYear)
+    queryParams += `&release_year=${encodeURIComponent(releaseYear)}`;
+  if (genre) queryParams += `&genre=${encodeURIComponent(genre)}`;
 
   try {
     searchButton.disabled = true;
@@ -89,9 +84,8 @@ async function searchAlbums() {
           break;
       }
       searchInput.value = "";
-      releaseDateInput.value = "";
-      minDurationInput.value = "";
-      maxDurationInput.value = "";
+      releaseYearInput.value = "";
+      genreInput.value = "";
 
       console.log(data);
     } else alert(data.detail ?? "Oops! Something failed. Please try again.");
@@ -104,10 +98,8 @@ async function searchAlbums() {
     searchButton.disabled = false;
     searchInput.disabled = false;
 
-    searchTypeSelect.disabled = false;
-    releaseDateInput.disabled = false;
-    minDurationInput.disabled = false;
-    maxDurationInput.disabled = false;
+    releaseYearInput.disabled = false;
+    genreInput.disabled = false;
 
     searchInput.focus();
   }
@@ -272,6 +264,7 @@ function displayArtists(data) {
         albumElement.classList.add("album");
 
         albumElement.innerHTML = `
+        <div class="album">
           <img src="${album.image_url.replace(
             "100x100",
             "600x600"
@@ -282,6 +275,7 @@ function displayArtists(data) {
               album.release_date
             ).toLocaleDateString()}</p>
           </div>
+        </div>
           <div class="tracks-container" style="display: none;"></div>
         `;
 

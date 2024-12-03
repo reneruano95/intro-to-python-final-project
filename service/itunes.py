@@ -209,7 +209,7 @@ def search_artist_by_track(track: Track) -> Artist:
 def search_albums(album_name: str, limit: int) -> list[Album]:
     albums = get_albums(album_name, limit)
     for album in albums:
-        get_tracks_by_album(album)
+        album.tracks = get_tracks_by_album(album.id)
     return albums
 
 

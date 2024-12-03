@@ -1,10 +1,12 @@
 import logging
 import re
+import requests
 from typing import Optional
 from fastapi import FastAPI, HTTPException, Request, responses, templating, Query
 from fastapi.staticfiles import StaticFiles
 from pathlib import Path
 from model.artist import Artist
+from model.album import Album
 from service.itunes import (
     search_artists,
     search_albums,
@@ -26,6 +28,9 @@ two adapters:
 
 # Configure logging to show info level and above to the console, using our custom format
 logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(name)s - %(message)s")
+
+# Define a regex pattern for name normalization
+NAME_PATTERN = r"([A-Za-z]{2,20})[^A-Za-z]*([A-Za-z]{0,20})"
 
 # Configure the Jinja2 template engine
 templates = templating.Jinja2Templates(directory="templates")
@@ -54,9 +59,7 @@ async def home(request: Request):
 # API route to get a list of albums for an artist
 @app.get("/artist/{name}")
 def get_artists(name: str):
-    if match := re.search(
-        r"([A-Za-z]{2,20})[^A-Za-z]*([A-Za-z]{0,20})", name.strip().lower()
-    ):
+    if match := re.search(NAME_PATTERN, name.strip().lower()):
         artist_name = " ".join(match.groups())
         # should we pass in the limit in the querystring?
         artist = search_artists(artist_name, 3)
@@ -76,44 +79,64 @@ def get_artists(name: str):
 @app.get("/albums/{album_name}")
 def get_albums(
     album_name: str,
-    release_date: Optional[str] = Query(
-        None, description="Release date in YYYY-MM-DD format"
+    release_year: Optional[int] = Query(
+        None, description="Release year in YYYY format", ge=1900, le=2024
     ),
-    min_duration: Optional[int] = Query(
-        None, description="Minimum track duration in seconds"
-    ),
-    max_duration: Optional[int] = Query(
-        None, description="Maximum track duration in seconds"
-    ),
+    genre: Optional[str] = Query(None, description="Genre of the album"),
+    limit: int = Query(10, description="Maximum number of results", ge=1, le=100),
 ):
-    # Here we would call the AlbumService to get a list of albums
-    if match := re.search(
-        r"([A-Za-z]{2,20})[^A-Za-z]*([A-Za-z]{0,20})", album_name.strip().lower()
-    ):
-        album_name = " ".join(match.groups())
-        # should we pass in the limit in the querystring?
-        albums = search_albums(album_name, 3)
+    """
+    Search for albums with optional filtering and pagination.
 
-        # Filter albums based on release date and track duration if provided
-        if release_date:
-            albums = [album for album in albums if album.release_date == release_date]
-        if min_duration:
-            albums = [
-                album
-                for album in albums
-                if any(track.time_millis >= min_duration for track in album.tracks)
-            ]
-        if max_duration:
-            albums = [
-                album
-                for album in albums
-                if any(track.time_millis <= max_duration for track in album.tracks)
-            ]
+    Args:
+        album_name: Name of the album to search
+        release_year: Filter by exact release year
+        min_duration: Minimum track duration (in seconds)
+        max_duration: Maximum track duration (in seconds)
+        genre: Exact genre match
+        limit: Maximum number of results to return
 
-        # print(albums)
-        return albums
-    else:
-        raise HTTPException(status_code=400, detail=f"Invalid album name: {album_name}")
+    Returns:
+        List of matching albums
+    """
+    # Normalize album name using regex
+    name_match = re.search(NAME_PATTERN, album_name.strip().lower())
+
+    if not name_match:
+        raise HTTPException(
+            status_code=400, detail=f"Invalid album name format: {album_name}"
+        )
+
+    # Join matched name groups
+    normalized_name = " ".join(name_match.groups())
+
+    # Search albums from iTunes API
+    try:
+        albums = search_albums(normalized_name, limit)
+    except requests.RequestException as e:
+        raise HTTPException(
+            status_code=500, detail=f"Error searching iTunes API: {str(e)}"
+        )
+
+    # Filter albums based on additional criteria
+    filtered_albums: list[Album] = []
+    for album in albums:
+        # Release year filter (using release date)
+        if release_year:
+            release_date = album.release_date
+            album_year = int(release_date.split("-")[0]) if release_date else None
+            if not album_year or album_year != release_year:
+                continue
+
+        # Genre filter
+        if genre:
+            album_genre = album.genre.lower()
+            if genre.lower() not in album_genre:
+                continue
+
+        filtered_albums.append(album)
+
+    return filtered_albums
 
 
 # - API route to get a list of tracks by name
@@ -121,11 +144,8 @@ def get_albums(
 def get_tracks(track_name: str):
 
     # Here we would call the AlbumService to get a list of tracks
-    if match := re.search(
-        r"([A-Za-z]{2,20})[^A-Za-z]*([A-Za-z]{0,20})", track_name.strip().lower()
-    ):
-        track_name = " ".join(match.groups())
-        # should we pass in the limit in the querystring?
+
+    if match := re.search(NAME_PATTERN, track_name.strip().lower()):
         tracks = search_tracks(track_name, 3)
         # print(tracks)
         return tracks
