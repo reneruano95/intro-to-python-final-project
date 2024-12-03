@@ -45,10 +45,13 @@ async function searchAlbums() {
     return;
   }
 
-  let queryParams = `${encodeURIComponent(searchTerm)}`;
-  if (releaseYear)
+  let queryParams = `?album_name=${encodeURIComponent(searchTerm)}`;
+  if (releaseYear) {
     queryParams += `&release_year=${encodeURIComponent(releaseYear)}`;
-  if (genre) queryParams += `&genre=${encodeURIComponent(genre)}`;
+  }
+  if (genre) {
+    queryParams += `&genre=${encodeURIComponent(genre)}`;
+  }
 
   try {
     searchButton.disabled = true;
@@ -88,19 +91,19 @@ async function searchAlbums() {
       genreInput.value = "";
 
       console.log(data);
-    } else alert(data.detail ?? "Oops! Something failed. Please try again.");
+    } else
+      alert(
+        data.detail ??
+          `Failed to retrieve ${searchType} for "${searchTerm}". Please try again.`
+      );
   } catch (error) {
     console.error("Error:", error);
 
     alert(`Could not retrieve ${searchType}. Please try again later.`);
   } finally {
-    searchTypeSelect.disabled = false;
     searchButton.disabled = false;
     searchInput.disabled = false;
-
-    releaseYearInput.disabled = false;
-    genreInput.disabled = false;
-
+    searchTypeSelect.disabled = false;
     searchInput.focus();
   }
 }

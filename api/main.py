@@ -76,7 +76,7 @@ def get_artists(name: str):
 
 
 # - API route to get a list of albums by name
-@app.get("/albums/{album_name}")
+@app.get("/albums/")
 def get_albums(
     album_name: str,
     release_year: Optional[int] = Query(
@@ -109,10 +109,12 @@ def get_albums(
 
     # Join matched name groups
     normalized_name = " ".join(name_match.groups())
+    print(f"Normalized Name: {normalized_name}")
 
     # Search albums from iTunes API
     try:
         albums = search_albums(normalized_name, limit)
+        print(f"Albums Retrieved: {albums}")
     except requests.RequestException as e:
         raise HTTPException(
             status_code=500, detail=f"Error searching iTunes API: {str(e)}"
@@ -121,16 +123,20 @@ def get_albums(
     # Filter albums based on additional criteria
     filtered_albums: list[Album] = []
     for album in albums:
+        print(f"Processing Album: {album}")
         # Release year filter (using release date)
         if release_year:
             release_date = album.release_date
+            print(f"Release Date: {release_date}")
             album_year = int(release_date.split("-")[0]) if release_date else None
+            print(f"Album Year: {album_year}")
             if not album_year or album_year != release_year:
                 continue
 
         # Genre filter
         if genre:
             album_genre = album.genre.lower()
+            print(f"Album Genre: {album_genre}")
             if genre.lower() not in album_genre:
                 continue
 
