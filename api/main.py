@@ -55,7 +55,14 @@ async def home(request: Request):
 # API route to get a list of albums for an artist
 @app.get("/artist/{name}")
 def get_artist(
-    name: str, page: int = Query(1, ge=1), page_size: int = Query(3, ge=1, le=20)
+    name: str,
+    page: int = Query(1, ge=1),
+    page_size: int = Query(
+        3,
+        ge=1,
+        le=20,
+    ),
+    limit: int = Query(10, ge=1, le=100),
 ):
     if match := re.search(NAME_PATTERN, name.strip().lower()):
         artist_name = " ".join(match.groups())
@@ -97,7 +104,7 @@ def get_albums(
         None, description="Release year in YYYY format", ge=1900, le=2024
     ),
     genre: Optional[str] = Query(None, description="Genre of the album"),
-    limit: int = Query(3, description="Maximum number of results", ge=1, le=100),
+    limit: int = Query(10, description="Maximum number of results", ge=1, le=100),
     page: int = Query(1, ge=1),
     page_size: int = Query(3, ge=1, le=20),
 ):
@@ -179,7 +186,10 @@ def get_albums(
 # - API route to get a list of tracks by name
 @app.get("/tracks/{track_name}")
 def get_tracks(
-    track_name: str, page: int = Query(1, ge=1), page_size: int = Query(3, ge=1, le=20)
+    track_name: str,
+    page: int = Query(1, ge=1),
+    page_size: int = Query(3, ge=1, le=20),
+    limit: int = Query(10, ge=1, le=100),
 ):
     if match := re.search(NAME_PATTERN, track_name.strip().lower()):
         tracks = search_tracks(track_name, page_size * 2)
