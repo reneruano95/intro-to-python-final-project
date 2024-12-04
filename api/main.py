@@ -60,26 +60,23 @@ def get_artist(
     if match := re.search(NAME_PATTERN, name.strip().lower()):
         artist_name = " ".join(match.groups())
         # Fetch more results than page_size to support pagination
-        artist = search_artists(
-            artist_name, page_size * 2
-        )  # TODO: fetch more results with the advanced search
-        # Calculate pagination
-        total_albums = len(artist.albums)  # Get total number of albums
+        artists = search_artists(artist_name, page_size * 2)
+
+        total_count = len(artists)
+        total_pages = -(-total_count // page_size)
         start_idx = (page - 1) * page_size
         end_idx = start_idx + page_size
 
-        # Create paginated response
-        paginated_artist = Artist(
-            name=artist.name, albums=artist.albums[start_idx:end_idx]
-        )
+        total_albums = (len(artist.albums) for artist in artists)
 
+        paginated_artist = artists[start_idx:end_idx]
         return {
             "artist": paginated_artist,
             "pagination": {
                 "total": total_albums,  # Use total_albums instead of total_count
                 "page": page,
                 "page_size": page_size,
-                "total_pages": -(-total_albums // page_size),  # Ceiling division
+                "total_pages": total_pages,
             },
         }
     else:
@@ -101,6 +98,8 @@ def get_albums(
     ),
     genre: Optional[str] = Query(None, description="Genre of the album"),
     limit: int = Query(3, description="Maximum number of results", ge=1, le=100),
+    page: int = Query(1, ge=1),
+    page_size: int = Query(3, ge=1, le=20),
 ):
     """
     Search for albums with optional filtering and pagination.
@@ -159,19 +158,48 @@ def get_albums(
 
         filtered_albums.append(album)
 
-    return filtered_albums
+    total_count = len(filtered_albums)
+    total_pages = -(-total_count // page_size)
+    start_idx = (page - 1) * page_size
+    end_idx = start_idx + page_size
+
+    paginated_albums = filtered_albums[start_idx:end_idx]
+
+    return {
+        "albums": paginated_albums,
+        "pagination": {
+            "total": total_count,
+            "page": page,
+            "page_size": page_size,
+            "total_pages": total_pages,
+        },
+    }
 
 
 # - API route to get a list of tracks by name
 @app.get("/tracks/{track_name}")
-def get_tracks(track_name: str):
-
-    # Here we would call the AlbumService to get a list of tracks
-
+def get_tracks(
+    track_name: str, page: int = Query(1, ge=1), page_size: int = Query(3, ge=1, le=20)
+):
     if match := re.search(NAME_PATTERN, track_name.strip().lower()):
-        tracks = search_tracks(track_name, 10)
-        # print(tracks)
-        return tracks
+        tracks = search_tracks(track_name, page_size * 2)
+
+        total_count = len(tracks)
+        total_pages = -(-total_count // page_size)
+        start_idx = (page - 1) * page_size
+        end_idx = start_idx + page_size
+
+        paginated_tracks = tracks[start_idx:end_idx]
+
+        return {
+            "tracks": paginated_tracks,
+            "pagination": {
+                "total": total_count,
+                "page": page,
+                "page_size": page_size,
+                "total_pages": total_pages,
+            },
+        }
     else:
         raise HTTPException(status_code=400, detail=f"Invalid track name: {track_name}")
 

@@ -1,3 +1,11 @@
+// Define variables in a scope that won't show on the page
+const state = {
+  currentPage: 1,
+  pageSize: 3,
+  currentArtist: "",
+  totalPages: 0,
+};
+
 document.addEventListener("DOMContentLoaded", () => {
   const searchInput = document.getElementById("search-input");
   const searchButton = document.querySelector("button");
@@ -5,13 +13,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const advancedSearchContainer = document.getElementById("advanced-search");
 
   searchButton.addEventListener("click", () => {
-    searchAlbums();
+    search();
   });
 
   searchInput.addEventListener("keydown", (event) => {
     if (event.key === "Enter") {
       event.preventDefault(); // Prevent form submission if inside a form
-      searchAlbums();
+      state.currentPage = 1; // Reset page on new search
+      search();
     }
   });
 
@@ -26,7 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
   searchInput.focus();
 });
 
-async function searchAlbums() {
+async function search() {
   const searchInput = document.getElementById("search-input");
   const searchButton = document.querySelector("button");
   const searchTypeSelect = document.getElementById("search-type");
@@ -47,18 +56,17 @@ async function searchAlbums() {
     return;
   }
 
-  let queryParams = `?album_name=${encodeURIComponent(searchTerm)}`;
-  if (releaseYear) {
-    queryParams += `&release_year=${encodeURIComponent(releaseYear)}`;
-  }
-  if (genre) {
-    queryParams += `&genre=${encodeURIComponent(genre)}`;
-  }
-  if (limit) {
-    queryParams += `&limit=${encodeURIComponent(limit)}`;
-  }
+  let queryParams = buildQueryParams(searchTerm, releaseYear, genre, limit);
+
+  state.currentArtist = searchTerm;
+  state.searchType = searchType;
+  state.searchTerm = searchTerm;
+
+  console.log("Searching for", searchType, searchTerm, queryParams);
 
   try {
+    disableSearchControls(true);
+
     searchButton.disabled = true;
     searchInput.disabled = true;
     searchTypeSelect.disabled = true;
@@ -66,13 +74,17 @@ async function searchAlbums() {
     let response;
     switch (searchType) {
       case "artists":
-        response = await fetch(`/artist/${encodeURIComponent(searchTerm)}`);
+        response = await fetch(
+          `/artist/${encodeURIComponent(searchTerm)}${queryParams}`
+        );
         break;
       case "albums":
         response = await fetch(`/albums/${queryParams}`);
         break;
       case "tracks":
-        response = await fetch(`/tracks/${encodeURIComponent(searchTerm)}`);
+        response = await fetch(
+          `/tracks/${encodeURIComponent(searchTerm)}${queryParams}`
+        );
         break;
       default:
         throw new Error("Invalid search type.");
@@ -80,21 +92,7 @@ async function searchAlbums() {
 
     const data = await response.json();
     if (response.ok) {
-      switch (searchType) {
-        case "artists":
-          displayArtists(data);
-          break;
-        case "albums":
-          displayAlbums(data);
-          break;
-        case "tracks":
-          displayTracks(data);
-          break;
-      }
-      searchInput.value = "";
-      releaseYearInput.value = "";
-      genreInput.value = "";
-      limitInput.value = "";
+      handleSearchResults(searchType, data);
 
       console.log(data);
     } else
@@ -107,10 +105,78 @@ async function searchAlbums() {
 
     alert(`Could not retrieve ${searchType}. Please try again later.`);
   } finally {
-    searchButton.disabled = false;
-    searchInput.disabled = false;
-    searchTypeSelect.disabled = false;
+    disableSearchControls(false);
+
     searchInput.focus();
+  }
+}
+
+function buildQueryParams(searchTerm, releaseYear, genre, limit) {
+  let queryParams = `?album_name=${encodeURIComponent(searchTerm)}`;
+  if (releaseYear) {
+    queryParams += `&release_year=${encodeURIComponent(releaseYear)}`;
+  }
+  if (genre) {
+    queryParams += `&genre=${encodeURIComponent(genre)}`;
+  }
+  if (limit) {
+    queryParams += `&limit=${encodeURIComponent(limit)}`;
+  }
+  queryParams += `&page=${state.currentPage}&page_size=${state.pageSize}`;
+  return queryParams;
+}
+
+function disableSearchControls(disable) {
+  const searchButton = document.querySelector("button");
+  const searchInput = document.getElementById("search-input");
+  const searchTypeSelect = document.getElementById("search-type");
+
+  searchButton.disabled = disable;
+  searchInput.disabled = disable;
+  searchTypeSelect.disabled = disable;
+}
+
+function handleSearchResults(searchType, data) {
+  switch (searchType) {
+    case "artists":
+      displayArtists(data.artist);
+      updatePagination(data.pagination);
+      break;
+    case "albums":
+      displayAlbums(data.albums);
+      updatePagination(data.pagination);
+      break;
+    case "tracks":
+      displayTracks(data.tracks);
+      updatePagination(data.pagination);
+      break;
+  }
+}
+
+function updatePagination(pagination) {
+  const paginationContainer = document.getElementById("pagination");
+  state.totalPages = pagination.total_pages;
+
+  paginationContainer.innerHTML = `
+    <button 
+      onclick="changePage(${state.currentPage - 1})" 
+      ${state.currentPage <= 1 ? "disabled" : ""}
+    >Previous</button>
+    <span class="pagination-info">Page ${state.currentPage} of ${
+    state.totalPages
+  }</span>
+    <button 
+      onclick="changePage(${state.currentPage + 1})" 
+      ${state.currentPage >= state.totalPages ? "disabled" : ""}
+    >Next</button>
+  `;
+}
+
+async function changePage(newPage) {
+  if (newPage >= 1 && newPage <= state.totalPages) {
+    state.currentPage = newPage;
+    await search();
+    window.scrollTo(0, 0);
   }
 }
 
@@ -212,20 +278,17 @@ function displayTracks(data) {
 
   data.forEach((track) => {
     const trackElement = document.createElement("div");
-    trackElement.classList.add("track");
-
+    trackElement.className = "track";
     trackElement.innerHTML = `
-      <div class="track-info">
-        <h2>${track.name}</h2>
-        <p>Artist: ${track.artist_name}</p>
-        <p>Album: ${track.album_name}</p>
-        <p>Duration: ${(track.time_millis / 60000).toFixed(2)} minutes</p>
-        ${
-          track.preview_url
-            ? `<audio class="audio-player" controls src="${track.preview_url}"></audio>`
-            : ""
-        }
-      </div>
+      <h3>${track.name}</h3>
+      <p>Artist: ${track.artist_name}</p>
+      <p>Album: ${track.album_name}</p>
+      <p>Genre: ${track.primaryGenreName}</p>
+      <p>Release Date: ${track.releaseDate}</p>
+      <audio controls>
+        <source src="${track.preview_url}" type="audio/mpeg">
+        Your browser does not support the audio element.
+      </audio>
     `;
 
     albumsContainer.appendChild(trackElement);
@@ -235,6 +298,11 @@ function displayTracks(data) {
 function displayArtists(data) {
   const albumsContainer = document.getElementById("albums");
   albumsContainer.innerHTML = ""; // Clear any existing content
+
+  if (!Array.isArray(data)) {
+    console.error("Expected an array but got:", data);
+    return;
+  }
 
   if (!data || data.length === 0) {
     albumsContainer.innerHTML = "<p>No artists found.</p>";

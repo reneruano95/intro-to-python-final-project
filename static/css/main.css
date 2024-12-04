@@ -114,3 +114,31 @@ body {
 .audio-player::-webkit-media-controls-play-button {
   /* WebKit browsers specific styling, not always necessary */
 }
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  gap: 10px;
+}
+
+.pagination button {
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.pagination button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.pagination-info {
+  margin: 0 15px;
+  color: #666;
+}
