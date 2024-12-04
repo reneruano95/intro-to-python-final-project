@@ -1,7 +1,7 @@
 // Define variables in a scope that won't show on the page
 const state = {
   currentPage: 1,
-  pageSize: 3,
+  pageSize: 5,
   currentArtist: "",
   totalPages: 0,
 };
