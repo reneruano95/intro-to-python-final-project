@@ -4,6 +4,8 @@ const state = {
   pageSize: 5,
   currentArtist: "",
   totalPages: 0,
+  currentData: [],
+  currentView: "",
 };
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -15,6 +17,51 @@ document.addEventListener("DOMContentLoaded", () => {
   searchButton.addEventListener("click", () => {
     search();
   });
+
+  // document.getElementById("sort-options").addEventListener("change", () => {
+  //   const sortOption = document.getElementById("sort-options").value;
+
+  //   const data = state.currentData; // Assuming you store the current data in state
+
+  //   let sortedData;
+  //   if (sortOption === "release-date") {
+  //     if (state.currentView === "artists") {
+  //       sortedData =
+  //     }
+  //     if (state.currentView === "albums") {
+  //       sortedData = sortByReleaseDate(data.albums);
+  //       console.log(sortedData);
+  //     }
+  //     if (state.currentView === "tracks") {
+  //       sortedData = sortByReleaseDate(data.tracks);
+  //       console.log(sortedData);
+  //     }
+  //     // sortedData = sortByReleaseDate(data);
+  //   } else if (sortOption === "alphabetical") {
+  //     if (state.currentView === "artists") {
+  //       sortedData = sortAlphabetically(data.artist.name);
+  //       console.log(sortedData);
+  //     }
+  //     if (state.currentView === "albums") {
+  //       sortedData = sortAlphabetically(data.albums.title);
+  //       console.log(sortedData);
+  //     }
+  //     if (state.currentView === "tracks") {
+  //       sortedData = sortAlphabetically(data.tracks.title);
+  //       console.log(sortedData);
+  //     }
+  //     // sortedData = sortAlphabetically(data);
+  //   }
+
+  // Call the appropriate display function with sorted data
+  //   if (state.currentView === "albums") {
+  //     displayAlbums(sortedData);
+  //   } else if (state.currentView === "tracks") {
+  //     displayTracks(sortedData);
+  //   } else if (state.currentView === "artists") {
+  //     displayArtists(sortedData);
+  //   }
+  // });
 
   searchInput.addEventListener("keydown", (event) => {
     if (event.key === "Enter") {
@@ -137,6 +184,9 @@ function disableSearchControls(disable) {
 }
 
 function handleSearchResults(searchType, data) {
+  state.currentData = data; // Store the current data in state
+  state.currentView = searchType; // Store the current view in state
+
   switch (searchType) {
     case "artists":
       displayArtists(data.artist);
@@ -278,17 +328,20 @@ function displayTracks(data) {
 
   data.forEach((track) => {
     const trackElement = document.createElement("div");
-    trackElement.className = "track";
+    const releaseDate = new Date(track.release_date || "").toLocaleDateString();
+    trackElement.className = "track card mb-3"; // Use Bootstrap card class for styling
     trackElement.innerHTML = `
-      <h3>${track.name}</h3>
-      <p>Artist: ${track.artist_name}</p>
-      <p>Album: ${track.album_name}</p>
-      <p>Genre: ${track.primaryGenreName}</p>
-      <p>Release Date: ${track.releaseDate}</p>
-      <audio controls>
-        <source src="${track.preview_url}" type="audio/mpeg">
-        Your browser does not support the audio element.
-      </audio>
+      <div class="card-body">
+        <h3 class="card-title">${track.name}</h3>
+        <p class="card-text"><strong>Artist:</strong> ${track.artist_name}</p>
+        <p class="card-text"><strong>Album:</strong> ${track.album_name}</p>
+        <p class="card-text"><strong>Genre:</strong> ${track.genre}</p>
+        <p class="card-text"><strong>Release Date:</strong> ${releaseDate}</p>
+        <audio controls class="w-100">
+          <source src="${track.preview_url}" type="audio/mpeg">
+          Your browser does not support the audio element.
+        </audio>
+      </div>
     `;
 
     albumsContainer.appendChild(trackElement);
@@ -299,11 +352,6 @@ function displayArtists(data) {
   const albumsContainer = document.getElementById("albums");
   albumsContainer.innerHTML = ""; // Clear any existing content
 
-  if (!Array.isArray(data)) {
-    console.error("Expected an array but got:", data);
-    return;
-  }
-
   if (!data || data.length === 0) {
     albumsContainer.innerHTML = "<p>No artists found.</p>";
     return;
@@ -311,49 +359,57 @@ function displayArtists(data) {
 
   data.forEach((artist, index) => {
     const artistElement = document.createElement("div");
-    artistElement.classList.add("artist");
+    artistElement.classList.add("artist", "card", "mb-3");
 
     const artistId = `artist-${index}`;
 
     artistElement.innerHTML = `
-      <h2 class="mt-1 d-flex justify-content-between">
-        <a class="link-dark link-underline-opacity-0" data-bs-toggle="collapse" href="#${artistId}" role="button" aria-expanded="false" aria-controls="${artistId}">
-          ${artist.name}
-        </a>
-        <div>(${artist.albums.length} albums)</div>
-      </h2>
-      <div class="collapse" id="${artistId}">
-        <div class="card card-body">
-          ${
-            artist.albums.length === 0
-              ? "<p>No albums found for this artist.</p>"
-              : ""
-          }
+      <div class="card-body">
+        <h2 class="card-title d-flex justify-content-between">
+          <a class="link-dark link-underline-opacity-0" data-bs-toggle="collapse" href="#${artistId}" role="button" aria-expanded="false" aria-controls="${artistId}">
+            ${artist.name}
+          </a>
+          <div>(${artist.albums.length} albums)</div>
+        </h2>
+        <div class="collapse" id="${artistId}">
+          <div class="card card-body">
+            ${
+              artist.albums.length === 0
+                ? "<p>No albums found for this artist.</p>"
+                : ""
+            }
+          </div>
         </div>
       </div>
     `;
 
-    const collapseContainer = artistElement.querySelector(".card-body");
+    const collapseContainer = artistElement.querySelector(
+      ".card-body .card-body"
+    );
 
     if (artist.albums.length > 0) {
       artist.albums.forEach((album) => {
         const albumElement = document.createElement("div");
-        albumElement.classList.add("album");
+        albumElement.classList.add("album", "card", "mb-3");
 
         albumElement.innerHTML = `
-        <button class="btn">
-          <img src="${album.image_url.replace(
-            "100x100",
-            "600x600"
-          )}" alt="Album Cover">
-          <div class="album-info">
-            <h3>${album.title}</h3>
-            <p>Release Date: ${new Date(
-              album.release_date
-            ).toLocaleDateString()}</p>
-          </div>
-        </button>
-          <div class="tracks-container" style="display: none;"></div>
+          <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#album-${
+            album.id
+          }" aria-expanded="false" aria-controls="album-${album.id}">
+            <img src="${album.image_url.replace(
+              "100x100",
+              "600x600"
+            )}" alt="Album Cover" class="img-fluid">
+            <div class="album-info">
+              <h3>${album.title}</h3>
+              <p>Release Date: ${new Date(
+                album.release_date
+              ).toLocaleDateString()}</p>
+            </div>
+          </button>
+          <div id="album-${
+            album.id
+          }" class="collapse tracks-container" style="display: none;"></div>
         `;
 
         albumElement.addEventListener("click", async () => {
@@ -416,4 +472,14 @@ function displayTracksInAlbum(tracks, container) {
 
     container.appendChild(trackElement);
   });
+}
+
+function sortByReleaseDate(data) {
+  return data.sort(
+    (a, b) => new Date(a.release_date) - new Date(b.release_date)
+  );
+}
+
+function sortAlphabetically(data) {
+  return data.sort();
 }
