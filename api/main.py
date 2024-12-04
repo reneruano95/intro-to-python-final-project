@@ -32,10 +32,7 @@ logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(name)s - %(mess
 # Define a regex pattern for name normalization
 NAME_PATTERN = r"([A-Za-z]{2,20})[^A-Za-z]*([A-Za-z]{0,20})"
 
-# Configure the Jinja2 template engine
 templates = templating.Jinja2Templates(directory="templates")
-
-# Configure the FastAPI app to serve the API and the home page
 app = FastAPI()
 
 app.mount(
@@ -45,7 +42,6 @@ app.mount(
 )
 
 
-# Serves the home page at / using the Jinja2 template engine
 @app.get("/", response_class=responses.HTMLResponse)
 async def home(request: Request):
     return templates.TemplateResponse(
@@ -58,13 +54,34 @@ async def home(request: Request):
 
 # API route to get a list of albums for an artist
 @app.get("/artist/{name}")
-def get_artists(name: str):
+def get_artist(
+    name: str, page: int = Query(1, ge=1), page_size: int = Query(3, ge=1, le=20)
+):
     if match := re.search(NAME_PATTERN, name.strip().lower()):
         artist_name = " ".join(match.groups())
-        # should we pass in the limit in the querystring?
-        artist = search_artists(artist_name, 10)
-        # print(artist)
-        return artist
+        # Fetch more results than page_size to support pagination
+        artist = search_artists(
+            artist_name, page_size * 2
+        )  # TODO: fetch more results with the advanced search
+        # Calculate pagination
+        total_albums = len(artist.albums)  # Get total number of albums
+        start_idx = (page - 1) * page_size
+        end_idx = start_idx + page_size
+
+        # Create paginated response
+        paginated_artist = Artist(
+            name=artist.name, albums=artist.albums[start_idx:end_idx]
+        )
+
+        return {
+            "artist": paginated_artist,
+            "pagination": {
+                "total": total_albums,  # Use total_albums instead of total_count
+                "page": page,
+                "page_size": page_size,
+                "total_pages": -(-total_albums // page_size),  # Ceiling division
+            },
+        }
     else:
         raise HTTPException(status_code=400, detail=f"Invalid artist name: {name}")
 
