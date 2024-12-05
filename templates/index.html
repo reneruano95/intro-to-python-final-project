@@ -259,9 +259,8 @@
                       <div class="track">
                           <div class="track-number">${track.number}</div>
                           <div class="track-name">${track.name}</div>
-                          <div class="track-time">${(
-                            track.time_millis / 60000
-                          ).toFixed(2)}
+                          <div class="track-time">
+                              Time: ${track.formatted_time}
                           </div>
                           <div class="track-preview">
                               ${track.preview_url ? `

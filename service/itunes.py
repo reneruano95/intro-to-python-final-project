@@ -16,12 +16,14 @@ def map_album(data) -> Album:
 
 
 def map_track(data) -> Track:
-    # Maps iTunes discs and tracks to Track
-    return Track(name=data['trackName'],
-                 disc=data['discNumber'],
-                 number=data['trackNumber'],
-                 time_millis=data['trackTimeMillis'],
-                 preview_url=data.get('previewUrl'))
+    track = Track(
+        name=data['trackName'],
+        disc=data['discNumber'],
+        number=data['trackNumber'],
+        time_millis=data['trackTimeMillis'],
+        preview_url=data.get('previewUrl'),
+    )
+    return track
 
 
 def get_artist(artist_name: str, limit: int) -> Artist:
@@ -54,12 +56,22 @@ def get_tracks(album: Album) -> None:
     if res.status_code == 200:
         data = res.json()
         tracks = data.get("results", [])[1:]
-        logger.info(f"""Loaded {len(tracks)} tracks of {
-                    album.title} from iTunes""")
-        album.tracks = [map_track(x) for x in tracks]
+        logger.info(f"Loaded {len(tracks)} tracks of {album.title} from iTunes")
+
+        # Map the tracks and include the formatted time
+        album.tracks = [
+            {
+                "name": x["trackName"],
+                "disc": x["discNumber"],
+                "number": x["trackNumber"],
+                "time_millis": x["trackTimeMillis"],
+                "formatted_time": f"{x['trackTimeMillis'] // 60000}:{(x['trackTimeMillis'] // 1000) % 60:02d}",
+                "preview_url": x.get("previewUrl"),
+            }
+            for x in tracks
+        ]
     else:
-        logger.error(f"""get_tracks failed on {
-            album.id}: {res.status_code}""")
+        logger.error(f"get_tracks failed on {album.id}: {res.status_code}")
         album.tracks = []
 
 
