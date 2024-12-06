@@ -3,7 +3,7 @@ import logging
 from dataclasses import asdict
 from model.artist import Artist
 from pathlib import Path
-from typing import Callable
+from typing import Callable, List
 
 logger = logging.getLogger(__name__)
 
@@ -35,7 +35,8 @@ def save_artist(artist: Artist):
         return
     # don't cache if albums with no tracks are found
     albums_with_tracks = [
-        album for album in artist.albums if album.tracks and len(album.tracks) > 0]
+        album for album in artist.albums if album.tracks and len(album.tracks) > 0
+    ]
     if n != len(albums_with_tracks):
         return
 
@@ -43,8 +44,15 @@ def save_artist(artist: Artist):
     if not path.parent.exists():
         path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w") as file:
-        json.dump({"name": artist.name, "albums": [
-                  asdict(album) for album in artist.albums]}, file, indent=2)
+        json.dump(
+            {
+                "id": artist.id,
+                "name": artist.name,
+                "albums": [asdict(album) for album in artist.albums],
+            },
+            file,
+            indent=2,
+        )
     logger.info(f"Cached {n} {artist.name} albums")
 
 
@@ -57,6 +65,7 @@ def cache_artist(fn: Callable[[str, int], Artist]) -> Callable[[str, int], Artis
     Returns:
         Callable[[str, int], Artist]: wrapped service function.
     """
+
     def wrapper(artist_name: str, limit: int) -> Artist:
         path = get_artist_path(artist_name, limit)
 
@@ -66,8 +75,10 @@ def cache_artist(fn: Callable[[str, int], Artist]) -> Callable[[str, int], Artis
                 # Load from cache and return a cached Artist instance
                 data = json.load(file)
                 artist = Artist(**data)
-                logger.info(f"""Loaded {len(artist.albums)} {
-                            artist.name} albums from cache""")
+                logger.info(
+                    f"""Loaded {len(artist.albums)} {
+                            artist.name} albums from cache"""
+                )
                 return artist
         else:
             # Call the original function if no cache is found
