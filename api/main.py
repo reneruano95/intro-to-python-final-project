@@ -14,6 +14,8 @@ from service.itunes import (
     search_tracks_by_album,
 )
 
+from service.lyrics import router as lyrics_router
+
 """
 This is the main entry point for the application.
 
@@ -40,6 +42,9 @@ app.mount(
     StaticFiles(directory=Path(__file__).parent.parent.absolute() / "static"),
     name="static",
 )
+
+# Include the lyrics router
+app.include_router(lyrics_router)
 
 
 @app.get("/", response_class=responses.HTMLResponse)

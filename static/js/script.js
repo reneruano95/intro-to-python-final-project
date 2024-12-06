@@ -12,6 +12,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const searchTypeSelect = document.getElementById("search-type");
   const advancedSearchContainer = document.getElementById("advanced-search");
 
+  console.log("Document loaded");
+
   searchButton.addEventListener("click", () => {
     search();
   });
@@ -29,6 +31,17 @@ document.addEventListener("DOMContentLoaded", () => {
       advancedSearchContainer.style.display = "block";
     } else {
       advancedSearchContainer.style.display = "none";
+    }
+  });
+
+  // Use event delegation to handle clicks on dynamically added .track elements
+  document.getElementById("albums").addEventListener("click", (event) => {
+    const trackElement = event.target.closest(".track");
+    if (trackElement) {
+      const artist = trackElement.dataset.artist;
+      const song = trackElement.dataset.song;
+      console.log(`Track clicked: artist=${artist}, song=${song}`);
+      fetchLyrics(artist, song);
     }
   });
 
@@ -279,15 +292,17 @@ function displayTracks(data) {
   data.forEach((track) => {
     const trackElement = document.createElement("div");
     trackElement.className = "track";
+    trackElement.dataset.artist = track.artist_name;
+    trackElement.dataset.song = track.name;
+
+    // console.log(trackElement.dataset.song);
     trackElement.innerHTML = `
       <div class="card-body">
         <h3 class="card-title">${track.name}</h3>
         <p class="card-text"><strong>Artist:</strong> ${track.artist_name}</p>
         <p class="card-text"><strong>Album:</strong> ${track.album_name}</p>
         <p class="card-text"><strong>Genre:</strong> ${track.genre}</p>
-        <p class="card-text"><strong>Release Date:</strong> ${new Date(
-          track.release_date
-        ).toLocaleDateString()}</p>
+        
         <p class="card-text"><strong>Duration:</strong> ${formatTimeMillis(
           track.time_millis
         )}</p>
@@ -428,4 +443,50 @@ function formatTimeMillis(timeMillis) {
   const minutes = Math.floor(timeMillis / 60000);
   const seconds = ((timeMillis % 60000) / 1000).toFixed(0);
   return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+}
+
+async function fetchLyrics(artist, song) {
+  try {
+    const response = await fetch(
+      `/lyrics/${encodeURIComponent(artist)}/${encodeURIComponent(song)}`
+    );
+    if (!response.ok) {
+      throw new Error("Failed to fetch lyrics");
+    }
+    const lyricsHtml = await response.text();
+    // console.log(lyricsHtml);
+
+    // displayLyrics(lyricsHtml);
+    displayLyricsInModal(lyricsHtml, artist, song);
+  } catch (error) {
+    console.error("Error fetching lyrics:", error);
+    alert("Failed to fetch lyrics. Please try again later.");
+  }
+}
+
+function displayLyrics(lyricsHtml) {
+  const lyricsContainer = document.getElementById("lyrics-container");
+  lyricsContainer.innerHTML = lyricsHtml;
+  lyricsContainer.style.display = "block";
+}
+
+function cleanLyrics(lyricsHtml) {
+  // Remove unnecessary spaces and add line breaks
+  return lyricsHtml
+    .replace(/<br\s*\/?>/g, "\n") // Replace <br> tags with newlines
+    .replace(/\n\s*\n/g, "\n\n") // Remove multiple newlines
+    .replace(/\n/g, "<br>"); // Replace newlines with <br> tags
+}
+
+function displayLyricsInModal(lyricsHtml, artist, song) {
+  const lyricsModalLabel = document.getElementById("lyricsModalLabel");
+  const lyricsModalBody = document.getElementById("lyrics-modal-body");
+
+  lyricsModalLabel.textContent = `${artist} - ${song}`;
+  lyricsModalBody.innerHTML = cleanLyrics(lyricsHtml);
+
+  const lyricsModal = new bootstrap.Modal(
+    document.getElementById("lyricsModal")
+  );
+  lyricsModal.show();
 }

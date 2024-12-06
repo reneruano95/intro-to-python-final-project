@@ -34,6 +34,7 @@ def map_track(data) -> Track:
     return Track(
         id=data["trackId"],
         name=data["trackName"],
+        genre=data["primaryGenreName"],
         artist_id=data["artistId"],
         artist_name=data["artistName"],
         album_id=data["collectionId"],

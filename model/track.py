@@ -11,5 +11,6 @@ class Track:
     album_name: str
     disc: int
     number: int
+    genre: str
     time_millis: int
     preview_url: str | None = None
