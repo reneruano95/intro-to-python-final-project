@@ -207,9 +207,9 @@ function displayAlbums(data) {
                   <div class="track">
                       <div class="track-number">${track.number}</div>
                       <div class="track-name">${track.name}</div>
-                      <div class="track-time">${(
-                        track.time_millis / 60000
-                      ).toFixed(2)}
+                      <div class="track-time"><p class="card-text"><strong>Duration:</strong> ${formatTimeMillis(
+                        track.time_millis
+                      )}</p>
                       </div>
                       <div class="track-preview">
                           ${
@@ -280,17 +280,23 @@ function displayTracks(data) {
     const trackElement = document.createElement("div");
     trackElement.className = "track";
     trackElement.innerHTML = `
-      <h3>${track.name}</h3>
-      <p>Artist: ${track.artist_name}</p>
-      <p>Album: ${track.album_name}</p>
-      <p>Genre: ${track.primaryGenreName}</p>
-      <p>Release Date: ${track.releaseDate}</p>
-      <audio controls>
-        <source src="${track.preview_url}" type="audio/mpeg">
-        Your browser does not support the audio element.
-      </audio>
+      <div class="card-body">
+        <h3 class="card-title">${track.name}</h3>
+        <p class="card-text"><strong>Artist:</strong> ${track.artist_name}</p>
+        <p class="card-text"><strong>Album:</strong> ${track.album_name}</p>
+        <p class="card-text"><strong>Genre:</strong> ${track.genre}</p>
+        <p class="card-text"><strong>Release Date:</strong> ${new Date(
+          track.release_date
+        ).toLocaleDateString()}</p>
+        <p class="card-text"><strong>Duration:</strong> ${formatTimeMillis(
+          track.time_millis
+        )}</p>
+        <audio controls class="w-100">
+          <source src="${track.preview_url}" type="audio/mpeg">
+          Your browser does not support the audio element.
+        </audio>
+      </div>
     `;
-
     albumsContainer.appendChild(trackElement);
   });
 }
@@ -416,4 +422,10 @@ function displayTracksInAlbum(tracks, container) {
 
     container.appendChild(trackElement);
   });
+}
+
+function formatTimeMillis(timeMillis) {
+  const minutes = Math.floor(timeMillis / 60000);
+  const seconds = ((timeMillis % 60000) / 1000).toFixed(0);
+  return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
 }
