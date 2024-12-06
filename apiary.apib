@@ -1,0 +1,26 @@
+FORMAT: 1A
+HOST: https://api.lyrics.ovh/v1
+
+# lyrics.ovh
+
+Simple API to retrieve the lyrics of a song.
+
+## Lyrics of a song [/{artist}/{title}]
+
++ Parameters
+    + artist: `Coldplay` (string) - Name of the artist
+    + title: `Adventure of a Lifetime` (string) - Title of the song
+
+### Search [GET]
+
++ Response 200 (application/json)
+
+        {
+            "lyrics": "Here the lyrics of the song"
+        }
+
++ Response 404 (application/json)
+
+        {
+            "error": "No lyrics found"
+        }
