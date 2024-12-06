@@ -1,0 +1,322 @@
+{
+  "name": "John Lennon",
+  "albums": [
+    {
+      "id": 1440853752,
+      "title": "Imagine",
+      "image_url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/21/e3/b0/21e3b048-c917-92c4-bd7d-ace44797b388/13UABIM52808.rgb.jpg/100x100bb.jpg",
+      "tracks": [
+        {
+          "name": "Imagine",
+          "disc": 1,
+          "number": 1,
+          "time_millis": 186853,
+          "formatted_time": "3:06",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/ab/7a/1a/ab7a1a66-d08d-3b92-6f6b-8be7371e1381/mzaf_7468750881125139347.plus.aac.p.m4a"
+        },
+        {
+          "name": "Crippled Inside",
+          "disc": 1,
+          "number": 2,
+          "time_millis": 232627,
+          "formatted_time": "3:52",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/8b/bc/12/8bbc1286-d7ed-d0ce-9920-d41c78ddf3d5/mzaf_177678296536636659.plus.aac.p.m4a"
+        },
+        {
+          "name": "Jealous Guy",
+          "disc": 1,
+          "number": 3,
+          "time_millis": 257733,
+          "formatted_time": "4:17",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/c5/3e/47/c53e470f-af52-f1d7-530b-4b883dacfbfb/mzaf_8816497199122815776.plus.aac.p.m4a"
+        },
+        {
+          "name": "It's So Hard",
+          "disc": 1,
+          "number": 4,
+          "time_millis": 149053,
+          "formatted_time": "2:29",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/5a/72/5d/5a725d4d-ab54-c9fd-1c6f-8b2080260ade/mzaf_18145086842656530867.plus.aac.p.m4a"
+        },
+        {
+          "name": "I Don't Wanna Be a Soldier Mama",
+          "disc": 1,
+          "number": 5,
+          "time_millis": 368653,
+          "formatted_time": "6:08",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/08/62/e7/0862e7da-43bb-25c0-a985-3d021e240fc2/mzaf_14168935922508852281.plus.aac.p.m4a"
+        },
+        {
+          "name": "Gimme Some Truth",
+          "disc": 1,
+          "number": 6,
+          "time_millis": 198160,
+          "formatted_time": "3:18",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/01/66/7a/01667a78-8de5-86ea-3ab6-b6aacd25f32a/mzaf_6795578076778586432.plus.aac.p.m4a"
+        },
+        {
+          "name": "Oh My Love",
+          "disc": 1,
+          "number": 7,
+          "time_millis": 167773,
+          "formatted_time": "2:47",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/68/7e/49/687e498b-0c88-bdca-c3e6-87b6f4b393dd/mzaf_16922964128974974018.plus.aac.p.m4a"
+        },
+        {
+          "name": "How Do You Sleep?",
+          "disc": 1,
+          "number": 8,
+          "time_millis": 339027,
+          "formatted_time": "5:39",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/27/f0/83/27f083b1-6517-26d7-58ce-91897fbe2c5a/mzaf_816538739637478598.plus.aac.p.m4a"
+        },
+        {
+          "name": "How?",
+          "disc": 1,
+          "number": 9,
+          "time_millis": 226333,
+          "formatted_time": "3:46",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/03/f5/93/03f593c2-1b75-1f30-3434-36822dd55f50/mzaf_2100642658238216018.plus.aac.p.m4a"
+        },
+        {
+          "name": "Oh Yoko!",
+          "disc": 1,
+          "number": 10,
+          "time_millis": 257124,
+          "formatted_time": "4:17",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/b4/62/c0/b462c00a-54dd-e4ac-874d-4fd439d3b99c/mzaf_4909050812040740379.plus.aac.p.m4a"
+        }
+      ]
+    },
+    {
+      "id": 1437948883,
+      "title": "Origins (Deluxe Edition)",
+      "image_url": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/3f/80/a8/3f80a8ef-5409-42ac-c126-c7354698c7fc/18UMGIM65849.rgb.jpg/100x100bb.jpg",
+      "tracks": [
+        {
+          "name": "Natural",
+          "disc": 1,
+          "number": 1,
+          "time_millis": 189467,
+          "formatted_time": "3:09",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/08/ec/cb/08eccb21-4309-4a68-ace9-1b5c01530591/mzaf_518073244561442860.plus.aac.p.m4a"
+        },
+        {
+          "name": "Boomerang",
+          "disc": 1,
+          "number": 2,
+          "time_millis": 187800,
+          "formatted_time": "3:07",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/f2/1f/b3/f21fb33f-1399-98f2-25c0-23f012bbf091/mzaf_13335938544085369865.plus.aac.p.m4a"
+        },
+        {
+          "name": "Machine",
+          "disc": 1,
+          "number": 3,
+          "time_millis": 181886,
+          "formatted_time": "3:01",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/4e/f1/fd/4ef1fdf3-c3d2-d095-6419-93281cc9c4e9/mzaf_7538450236811497010.plus.aac.p.m4a"
+        },
+        {
+          "name": "Cool Out",
+          "disc": 1,
+          "number": 4,
+          "time_millis": 217867,
+          "formatted_time": "3:37",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/78/09/fe/7809fe8a-9ac0-13f1-d0cc-e12b8b8f466d/mzaf_1018626327135770098.plus.aac.p.m4a"
+        },
+        {
+          "name": "Bad Liar",
+          "disc": 1,
+          "number": 5,
+          "time_millis": 260770,
+          "formatted_time": "4:20",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/88/af/74/88af7447-b26a-9aea-9a1c-36680e8088f0/mzaf_13515032427052888181.plus.aac.p.m4a"
+        },
+        {
+          "name": "West Coast",
+          "disc": 1,
+          "number": 6,
+          "time_millis": 217173,
+          "formatted_time": "3:37",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/28/c5/37/28c537ac-898f-fbf5-18f7-94119a28b696/mzaf_10214573242874437701.plus.aac.p.m4a"
+        },
+        {
+          "name": "Zero (From \"Ralph Breaks the Internet\")",
+          "disc": 1,
+          "number": 7,
+          "time_millis": 210935,
+          "formatted_time": "3:30",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/d4/b9/e8/d4b9e828-6504-d6c3-01ad-1c71812e14e7/mzaf_18443932065129246017.plus.aac.p.m4a"
+        },
+        {
+          "name": "Bullet In a Gun",
+          "disc": 1,
+          "number": 8,
+          "time_millis": 204853,
+          "formatted_time": "3:24",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/21/58/94/21589498-7be0-3361-5ba6-fe0d3716585f/mzaf_9329469430353253387.plus.aac.p.m4a"
+        },
+        {
+          "name": "Digital",
+          "disc": 1,
+          "number": 9,
+          "time_millis": 201044,
+          "formatted_time": "3:21",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/a3/00/2d/a3002d25-4386-1638-2678-34338eb56976/mzaf_4921000758366290376.plus.aac.p.m4a"
+        },
+        {
+          "name": "Only",
+          "disc": 1,
+          "number": 10,
+          "time_millis": 180736,
+          "formatted_time": "3:00",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/b9/02/d6/b902d673-d2ce-ef1a-e57f-43b6887687cb/mzaf_8570002691619089236.plus.aac.p.m4a"
+        },
+        {
+          "name": "Stuck",
+          "disc": 1,
+          "number": 11,
+          "time_millis": 190850,
+          "formatted_time": "3:10",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/f9/f2/11/f9f211b8-913f-51da-71cd-f6837f7cb65e/mzaf_532751688701278700.plus.aac.p.m4a"
+        },
+        {
+          "name": "Love",
+          "disc": 1,
+          "number": 12,
+          "time_millis": 166361,
+          "formatted_time": "2:46",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/8a/dd/42/8add42e5-0393-7601-80b1-8a39d3a390ad/mzaf_3309633055774917110.plus.aac.p.m4a"
+        },
+        {
+          "name": "Birds",
+          "disc": 1,
+          "number": 13,
+          "time_millis": 219435,
+          "formatted_time": "3:39",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/4a/89/a1/4a89a1e9-e5a5-ecbe-e806-b66abcdfbe14/mzaf_10833942382188377087.plus.aac.p.m4a"
+        },
+        {
+          "name": "Burn Out",
+          "disc": 1,
+          "number": 14,
+          "time_millis": 273887,
+          "formatted_time": "4:33",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/51/15/02/511502a7-5b21-50b5-6693-d225bef0d207/mzaf_681001682679221897.plus.aac.p.m4a"
+        },
+        {
+          "name": "Real Life",
+          "disc": 1,
+          "number": 15,
+          "time_millis": 247535,
+          "formatted_time": "4:07",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/97/fc/b0/97fcb0b7-d4c4-5f3c-d3e6-b527f896799b/mzaf_212635291262262493.plus.aac.p.m4a"
+        }
+      ]
+    },
+    {
+      "id": 1411625594,
+      "title": "Evolve",
+      "image_url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/11/7a/b8/117ab805-6811-8929-18b9-0fad7baf0c25/17UMGIM98210.rgb.jpg/100x100bb.jpg",
+      "tracks": [
+        {
+          "name": "Next to Me",
+          "disc": 1,
+          "number": 1,
+          "time_millis": 230289,
+          "formatted_time": "3:50",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/3a/eb/89/3aeb8937-7803-e2ee-13d5-1ca0f0aa755c/mzaf_12812315081466090915.plus.aac.p.m4a"
+        },
+        {
+          "name": "I Don't Know Why",
+          "disc": 1,
+          "number": 2,
+          "time_millis": 190131,
+          "formatted_time": "3:10",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/20/0d/dc/200ddce5-c0fd-8b6c-eb83-728671c9cc9a/mzaf_3481250826242325663.plus.aac.p.m4a"
+        },
+        {
+          "name": "Whatever It Takes",
+          "disc": 1,
+          "number": 3,
+          "time_millis": 201241,
+          "formatted_time": "3:21",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/e0/61/7b/e0617bcd-6c32-b984-f100-95b94259557f/mzaf_7839019836925839746.plus.aac.p.m4a"
+        },
+        {
+          "name": "Believer",
+          "disc": 1,
+          "number": 4,
+          "time_millis": 204345,
+          "formatted_time": "3:24",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/7a/82/0f/7a820f2e-8f2b-cc24-48c2-3727cfbff9be/mzaf_11092187904649154210.plus.aac.p.m4a"
+        },
+        {
+          "name": "Walking the Wire",
+          "disc": 1,
+          "number": 5,
+          "time_millis": 232909,
+          "formatted_time": "3:52",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/7a/84/63/7a8463ab-27f0-7a72-f859-169f7fa735c8/mzaf_17776722483832854558.plus.aac.p.m4a"
+        },
+        {
+          "name": "Rise Up",
+          "disc": 1,
+          "number": 6,
+          "time_millis": 231712,
+          "formatted_time": "3:51",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/19/83/22/198322fa-e409-c632-894d-7ddced77f7df/mzaf_10793022832000503472.plus.aac.p.m4a"
+        },
+        {
+          "name": "I'll Make It Up to You",
+          "disc": 1,
+          "number": 7,
+          "time_millis": 262602,
+          "formatted_time": "4:22",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/8b/45/af/8b45af87-9671-fb3b-a0e6-1076188bb493/mzaf_13108699713103450573.plus.aac.p.m4a"
+        },
+        {
+          "name": "Yesterday",
+          "disc": 1,
+          "number": 8,
+          "time_millis": 205114,
+          "formatted_time": "3:25",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/2b/cc/9c/2bcc9cc8-2fa9-14a3-357e-b180b8ce76c0/mzaf_9228201765897661567.plus.aac.p.m4a"
+        },
+        {
+          "name": "Mouth of the River",
+          "disc": 1,
+          "number": 9,
+          "time_millis": 221563,
+          "formatted_time": "3:41",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/a2/b3/21/a2b321e4-0616-4d26-2202-8c28a07cbd33/mzaf_13654105165771627461.plus.aac.p.m4a"
+        },
+        {
+          "name": "Thunder",
+          "disc": 1,
+          "number": 10,
+          "time_millis": 187145,
+          "formatted_time": "3:07",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/51/d7/55/51d75514-5e1d-ed01-52eb-76b30f7c8290/mzaf_6901903421309258968.plus.aac.p.m4a"
+        },
+        {
+          "name": "Start Over",
+          "disc": 1,
+          "number": 11,
+          "time_millis": 186089,
+          "formatted_time": "3:06",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/61/ab/ca/61abca08-2a7c-228a-d36c-2c251e54f9b3/mzaf_5677552590576307821.plus.aac.p.m4a"
+        },
+        {
+          "name": "Dancing In the Dark",
+          "disc": 1,
+          "number": 12,
+          "time_millis": 233923,
+          "formatted_time": "3:53",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/14/5c/6d/145c6d63-284a-3b51-52e1-3a79166feb80/mzaf_14789001838987837495.plus.aac.p.m4a"
+        }
+      ]
+    }
+  ]
+}
