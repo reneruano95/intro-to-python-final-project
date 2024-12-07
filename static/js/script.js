@@ -4,9 +4,11 @@ const state = {
   pageSize: 5,
   currentArtist: "",
   totalPages: 0,
-  currentData: [],
   currentView: "",
+  currentData: null,
 };
+
+let sortOrder = "asc";
 
 document.addEventListener("DOMContentLoaded", () => {
   const searchInput = document.getElementById("search-input");
@@ -18,50 +20,15 @@ document.addEventListener("DOMContentLoaded", () => {
     search();
   });
 
-  // document.getElementById("sort-options").addEventListener("change", () => {
-  //   const sortOption = document.getElementById("sort-options").value;
-
-  //   const data = state.currentData; // Assuming you store the current data in state
-
-  //   let sortedData;
-  //   if (sortOption === "release-date") {
-  //     if (state.currentView === "artists") {
-  //       sortedData =
-  //     }
-  //     if (state.currentView === "albums") {
-  //       sortedData = sortByReleaseDate(data.albums);
-  //       console.log(sortedData);
-  //     }
-  //     if (state.currentView === "tracks") {
-  //       sortedData = sortByReleaseDate(data.tracks);
-  //       console.log(sortedData);
-  //     }
-  //     // sortedData = sortByReleaseDate(data);
-  //   } else if (sortOption === "alphabetical") {
-  //     if (state.currentView === "artists") {
-  //       sortedData = sortAlphabetically(data.artist.name);
-  //       console.log(sortedData);
-  //     }
-  //     if (state.currentView === "albums") {
-  //       sortedData = sortAlphabetically(data.albums.title);
-  //       console.log(sortedData);
-  //     }
-  //     if (state.currentView === "tracks") {
-  //       sortedData = sortAlphabetically(data.tracks.title);
-  //       console.log(sortedData);
-  //     }
-  //     // sortedData = sortAlphabetically(data);
-  //   }
-
-  // Call the appropriate display function with sorted data
-  //   if (state.currentView === "albums") {
-  //     displayAlbums(sortedData);
-  //   } else if (state.currentView === "tracks") {
-  //     displayTracks(sortedData);
-  //   } else if (state.currentView === "artists") {
-  //     displayArtists(sortedData);
-  //   }
-  // });
+  document.getElementById("sort-button").addEventListener("click", () => {
+    sortOrder = sortOrder === "asc" ? "desc" : "asc";
+    const sortButton = document.getElementById("sort-button");
+    sortButton.textContent = `Sort by Name (${
+      sortOrder === "asc" ? "Asc" : "Desc"
+    })`;
+    console.log("Sorting results by name:", sortOrder);
+    sortResultsByName(sortOrder);
+  });
 
   searchInput.addEventListener("keydown", (event) => {
     if (event.key === "Enter") {
@@ -140,8 +107,6 @@ async function search() {
     const data = await response.json();
     if (response.ok) {
       handleSearchResults(searchType, data);
-
-      console.log(data);
     } else
       alert(
         data.detail ??
@@ -249,7 +214,7 @@ function displayAlbums(data) {
       .map(
         (disc) => `
       <div class="disc-section">
-          <h3>Genre ${album.genre}</h3>
+          <h3>Genre: ${album.genre}</h3>
           <div class="track-list">
               ${disc.tracks
                 .map(
@@ -474,12 +439,73 @@ function displayTracksInAlbum(tracks, container) {
   });
 }
 
-function sortByReleaseDate(data) {
-  return data.sort(
-    (a, b) => new Date(a.release_date) - new Date(b.release_date)
-  );
+function sortResultsByName(order) {
+  switch (state.currentView) {
+    case "artists":
+      sortArtistsByName(order);
+      break;
+    case "albums":
+      sortAlbumsByName(order);
+      break;
+    case "tracks":
+      sortTracksByName(order);
+      break;
+  }
 }
 
-function sortAlphabetically(data) {
-  return data.sort();
+function sortArtistsByName(order) {
+  const artistsContainer = document.getElementById("albums");
+  const artists = Array.from(artistsContainer.getElementsByClassName("artist"));
+
+  artists.sort((a, b) => {
+    const nameA = a.querySelector(".card-title a").textContent.toUpperCase();
+    const nameB = b.querySelector(".card-title a").textContent.toUpperCase();
+
+    if (order === "asc") {
+      return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
+    } else {
+      return nameA > nameB ? -1 : nameA < nameB ? 1 : 0;
+    }
+  });
+
+  artistsContainer.innerHTML = "";
+  artists.forEach((artist) => artistsContainer.appendChild(artist));
+}
+
+function sortAlbumsByName(order) {
+  const albumsContainer = document.getElementById("albums");
+  const albums = Array.from(albumsContainer.getElementsByClassName("album"));
+
+  albums.sort((a, b) => {
+    const nameA = a.querySelector(".album-info h2").textContent.toUpperCase();
+    const nameB = b.querySelector(".album-info h2").textContent.toUpperCase();
+
+    if (order === "asc") {
+      return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
+    } else {
+      return nameA > nameB ? -1 : nameA < nameB ? 1 : 0;
+    }
+  });
+
+  albumsContainer.innerHTML = "";
+  albums.forEach((album) => albumsContainer.appendChild(album));
+}
+
+function sortTracksByName(order) {
+  const tracksContainer = document.getElementById("albums");
+  const tracks = Array.from(tracksContainer.getElementsByClassName("track"));
+
+  tracks.sort((a, b) => {
+    const nameA = a.querySelector(".card-title").textContent.toUpperCase();
+    const nameB = b.querySelector(".card-title").textContent.toUpperCase();
+
+    if (order === "asc") {
+      return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
+    } else {
+      return nameA > nameB ? -1 : nameA < nameB ? 1 : 0;
+    }
+  });
+
+  tracksContainer.innerHTML = "";
+  tracks.forEach((track) => tracksContainer.appendChild(track));
 }
