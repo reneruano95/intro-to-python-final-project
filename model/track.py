@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 
+
 @dataclass
 class Track:
     id: int
@@ -10,6 +11,7 @@ class Track:
     album_name: str
     disc: int
     number: int
+    release_date: str
     genre: str
     time_millis: int
     preview_url: str | None = None

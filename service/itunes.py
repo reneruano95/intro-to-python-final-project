@@ -41,6 +41,8 @@ def map_track(data) -> Track:
         album_name=data["collectionName"],
         disc=data["discNumber"],
         number=data["trackNumber"],
+        genre=data["primaryGenreName"],
+        release_date=data["releaseDate"],
         time_millis=data["trackTimeMillis"],
         preview_url=data.get("previewUrl"),
     )
