@@ -97,8 +97,38 @@
         <!-- Album entries will be inserted here dynamically -->
       </div>
 
+      <!-- <div id="lyrics-container" style="display: none"> -->
+      <!-- Lyrics will be inserted here dynamically -->
+      <!-- </div> -->
+
       <div class="pagination" id="pagination">
         <!-- Pagination controls will be inserted here dynamically -->
+      </div>
+
+      <!-- Modal -->
+      <div
+        class="modal fade"
+        id="lyricsModal"
+        tabindex="-1"
+        aria-labelledby="lyricsModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-4" id="lyricsModalLabel">Lyrics</h1>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body" id="lyrics-modal-body">
+              <!-- Lyrics will be inserted here dynamically -->
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
