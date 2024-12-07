@@ -1,0 +1,218 @@
+{
+  "name": "Iggy Azalea & Alice Chater",
+  "albums": [
+    {
+      "id": 1485649612,
+      "title": "Lola - Single",
+      "image_url": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/cc/b2/ba/ccb2bad4-2c71-793b-d527-f682d291b807/194690044199_cover.jpg/100x100bb.jpg",
+      "tracks": [
+        {
+          "name": "Lola",
+          "disc": 1,
+          "number": 1,
+          "time_millis": 232123,
+          "formatted_time": "3:52",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/be/c5/79/bec579e7-a089-f3ed-da24-d0896324caf9/mzaf_13566545273787978041.plus.aac.p.m4a"
+        }
+      ]
+    },
+    {
+      "id": 1716490429,
+      "title": "Lola",
+      "image_url": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/cc/9f/82/cc9f824b-52b8-50a8-be9e-679040da4d03/810090093437.png/100x100bb.jpg",
+      "tracks": [
+        {
+          "name": "Neon Trees",
+          "disc": 1,
+          "number": 1,
+          "time_millis": 103035,
+          "formatted_time": "1:43",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/d1/65/e0/d165e08f-2913-65f7-0950-913402892290/mzaf_7566854020842142299.plus.aac.p.m4a"
+        },
+        {
+          "name": "Crocodile",
+          "disc": 1,
+          "number": 2,
+          "time_millis": 225626,
+          "formatted_time": "3:45",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/27/bb/bd/27bbbd1d-16ec-03fb-4b75-3c0e0420524f/mzaf_3398714688717104395.plus.aac.p.m4a"
+        },
+        {
+          "name": "Sadie",
+          "disc": 1,
+          "number": 3,
+          "time_millis": 223588,
+          "formatted_time": "3:43",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/45/3e/f8/453ef810-3c11-4cc8-8341-128a4d57e0bf/mzaf_12248789266790368754.plus.aac.p.m4a"
+        },
+        {
+          "name": "Backwards",
+          "disc": 1,
+          "number": 4,
+          "time_millis": 272625,
+          "formatted_time": "4:32",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/21/00/f8/2100f8f5-bc85-a23a-ef0d-53668c1b6737/mzaf_15819124112041282858.plus.aac.p.m4a"
+        },
+        {
+          "name": "Sun Comes Up",
+          "disc": 1,
+          "number": 5,
+          "time_millis": 247283,
+          "formatted_time": "4:07",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/97/49/69/974969c2-098b-3306-daf0-5bc2cefb441a/mzaf_8265746261414138823.plus.aac.p.m4a"
+        },
+        {
+          "name": "Orcas",
+          "disc": 1,
+          "number": 6,
+          "time_millis": 103276,
+          "formatted_time": "1:43",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/6c/de/4e/6cde4e3c-4b96-9b9c-2c79-0d072f46c6f6/mzaf_13537838676193607591.plus.aac.p.m4a"
+        },
+        {
+          "name": "Insides",
+          "disc": 1,
+          "number": 7,
+          "time_millis": 261364,
+          "formatted_time": "4:21",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/ee/da/2d/eeda2de2-1f82-cfe4-47ae-005e75c2f45a/mzaf_9685717952765503975.plus.aac.p.m4a"
+        },
+        {
+          "name": "Bioluminescence",
+          "disc": 1,
+          "number": 8,
+          "time_millis": 309390,
+          "formatted_time": "5:09",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/36/7a/e7/367ae7fd-0925-9c71-e667-c8c30b86e2a2/mzaf_14625208882636193171.plus.aac.p.m4a"
+        },
+        {
+          "name": "Spinnaker Days",
+          "disc": 1,
+          "number": 9,
+          "time_millis": 220062,
+          "formatted_time": "3:40",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/a4/c2/dc/a4c2dcf3-516d-be1c-496e-d1c3ed09b0ad/mzaf_14167553761296130786.plus.aac.p.m4a"
+        },
+        {
+          "name": "Alone in the Mountains",
+          "disc": 1,
+          "number": 10,
+          "time_millis": 196804,
+          "formatted_time": "3:16",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/2d/fd/e7/2dfde7e2-fc66-41f3-e6ce-4ec6e63593d6/mzaf_14440889639970465492.plus.aac.p.m4a"
+        },
+        {
+          "name": "Baja",
+          "disc": 1,
+          "number": 11,
+          "time_millis": 302834,
+          "formatted_time": "5:02",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/e1/8d/1e/e18d1efa-c43d-30a1-9f0f-ebaa1369f556/mzaf_1304535029481989657.plus.aac.p.m4a"
+        }
+      ]
+    },
+    {
+      "id": 1072167779,
+      "title": "Lola",
+      "image_url": "https://is1-ssl.mzstatic.com/image/thumb/Music49/v4/19/4a/d5/194ad5c0-8210-4e5e-9f2a-ed87cfb58fd5/886445683769.jpg/100x100bb.jpg",
+      "tracks": [
+        {
+          "name": "Perfidia",
+          "disc": 1,
+          "number": 1,
+          "time_millis": 179520,
+          "formatted_time": "2:59",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/9a/a0/d0/9aa0d031-738f-2752-6f31-138ccff2abeb/mzaf_9176853184500302044.plus.aac.p.m4a"
+        },
+        {
+          "name": "Llano Estacado",
+          "disc": 1,
+          "number": 2,
+          "time_millis": 219227,
+          "formatted_time": "3:39",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/cc/9f/69/cc9f69a2-d535-a796-4e15-dc523e8ebcb1/mzaf_7339830971065451535.plus.aac.p.m4a"
+        },
+        {
+          "name": "I Dreamed I Was Lola Beltr\u00e1n",
+          "disc": 1,
+          "number": 3,
+          "time_millis": 323693,
+          "formatted_time": "5:23",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/d7/19/cf/d719cf76-f941-93e3-5ac6-17ec40886618/mzaf_3829518081018080944.plus.aac.p.m4a"
+        },
+        {
+          "name": "La \u00daltima Vez",
+          "disc": 1,
+          "number": 4,
+          "time_millis": 268787,
+          "formatted_time": "4:28",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/44/f8/29/44f82971-594e-b5e2-63e5-3a422257129d/mzaf_1013448793996161115.plus.aac.p.m4a"
+        },
+        {
+          "name": "Que Manera De Perder",
+          "disc": 1,
+          "number": 5,
+          "time_millis": 227867,
+          "formatted_time": "3:47",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/ef/ab/b3/efabb396-47a7-80b9-49de-5f6eb8a71dd1/mzaf_15123856472251769070.plus.aac.p.m4a"
+        },
+        {
+          "name": "Fr\u00edo En El Alma",
+          "disc": 1,
+          "number": 6,
+          "time_millis": 208853,
+          "formatted_time": "3:28",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/aa/21/11/aa211168-4074-c73b-e375-ea613014c205/mzaf_10147398118604380393.plus.aac.p.m4a"
+        },
+        {
+          "name": "Z",
+          "disc": 1,
+          "number": 7,
+          "time_millis": 268053,
+          "formatted_time": "4:28",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/59/17/98/59179861-7de5-0caf-d4d8-db7a8150ef7a/mzaf_3323639585251832238.plus.aac.p.m4a"
+        },
+        {
+          "name": "Noche De Ronda",
+          "disc": 1,
+          "number": 8,
+          "time_millis": 278533,
+          "formatted_time": "4:38",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/e1/ed/ed/e1ededf4-22c1-8440-d1a9-f28000e526c9/mzaf_14688161714522018186.plus.aac.p.m4a"
+        },
+        {
+          "name": "Caricias",
+          "disc": 1,
+          "number": 9,
+          "time_millis": 241053,
+          "formatted_time": "4:01",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/2b/23/b9/2b23b90f-be19-65f1-5923-5ab0dc347cdc/mzaf_7261827942167628489.plus.aac.p.m4a"
+        },
+        {
+          "name": "The West Side",
+          "disc": 1,
+          "number": 10,
+          "time_millis": 199573,
+          "formatted_time": "3:19",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/79/c3/06/79c3066f-805e-fd7f-583a-bf0b1fb719c9/mzaf_221322579483586470.plus.aac.p.m4a"
+        },
+        {
+          "name": "Si No Te Vas (Instrumental)",
+          "disc": 1,
+          "number": 11,
+          "time_millis": 261827,
+          "formatted_time": "4:21",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/b5/ed/92/b5ed92fc-38a4-aef8-8009-a9aa0d8da49e/mzaf_8645632314900271042.plus.aac.p.m4a"
+        },
+        {
+          "name": "Si No Te Vas",
+          "disc": 1,
+          "number": 12,
+          "time_millis": 211467,
+          "formatted_time": "3:31",
+          "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/ac/0a/f9/ac0af9c7-182e-0a40-3a76-27d3cc6db4c4/mzaf_17348024935042551261.plus.aac.p.m4a"
+        }
+      ]
+    }
+  ]
+}
